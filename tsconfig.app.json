@@ -1,7 +1,15 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json", // @vue/tsconfig 是 Vue 官方提供的一组 TypeScript 配置预设。tsconfig.dom.json 是针对浏览器环境（DOM）的配置，适合 Vue 项目。
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo", // 指定 TypeScript 增量编译信息的存储路径
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
+    /* Path  */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@assets/*": ["src/assets/*"]
+    },
+
     /* Linting */
     "strict": true, // 检查并报错未使用的函数参数。
     "noFallthroughCasesInSwitch": true,

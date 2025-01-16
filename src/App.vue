@@ -1,7 +1,13 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>HELLO</div>
+  <div id="app">
+    <RouterView />
+  </div>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+#app{
+overflow: hidden;
+}
+</style>
