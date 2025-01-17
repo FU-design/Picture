@@ -1,10 +1,19 @@
 # Project configuration
 
-## 代码提交规范
-- **Commitizen (git-cz)**:
-> 基于 Node.js 的 `git commit` 命令行工具，辅助生成标准化规范化的 commit message。
->
-> `git-cz`（ commitizen 适配器）: 更换 commitizen 命令行工具的 **交互方式** 插件。
+###  开发环境配置
+- Vue
+- VueRouter
+- Pinia
+- Vite
+- TypeScript
+- Node.js (^18.18.0, ^20.9.0, or >=21.1.0)
 
-- **Commitlint**
-> 检查提交信息是否符合规范
+### 代码规范与格式化
+- ESLint
+- Commitizen (git-cz):
+- Commitlint
+- Husky
+
+### 样式处理
+- Sass
+- Tailwind css
