@@ -3,5 +3,8 @@
 @tailwind utilities;
 
 :root{
-  
+  position: relative;
+  color: theme(colors.zinc.400);
+  background-color: theme(colors.black);
 }
+

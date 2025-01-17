@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import LayoutMain from './layout-main/index.vue'
+import LayoutHeader from '@/layout/layout-header/index.vue'
+import LayoutMain from '@/layout/layout-main/index.vue'
 </script>
 
 <template>
   <div class="layout">
+    <LayoutHeader />
     <LayoutMain>
       <RouterView />
     </LayoutMain>
@@ -11,5 +13,4 @@ import LayoutMain from './layout-main/index.vue'
 </template>
 
 <style scoped>
-
 </style>
