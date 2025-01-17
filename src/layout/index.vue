@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import PicTheme from '@/components/pic-theme/pic-theme.vue'
 import LayoutHeader from '@/layout/layout-header/index.vue'
 import LayoutMain from '@/layout/layout-main/index.vue'
 </script>
 
 <template>
-  <div class="layout">
+  <div>
+    <PicTheme />
     <LayoutHeader />
     <LayoutMain>
       <RouterView />

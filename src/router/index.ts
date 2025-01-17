@@ -9,7 +9,18 @@ const routes = [
     children: [
       {
         path: '/home',
+        name: 'HOME',
         component: () => import('@/view/home.vue'),
+      },
+      {
+        path: '/notes',
+        name: 'NOTES',
+        component: () => import('@/view/notes.vue'),
+      },
+      {
+        path: '/source',
+        name: 'SOURCES',
+        component: () => import('@/view/sources.vue'),
       },
     ],
   },

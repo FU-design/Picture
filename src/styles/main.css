@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
-  position: relative;
-  color: theme(colors.zinc.400);
-  background-color: theme(colors.black);
+:root {
+ background-color: theme(backgroundColor.black);
+ color: theme(textColor.white)
 }
+
 

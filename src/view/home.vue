@@ -3,13 +3,10 @@ import PicCard from '@/components/pic-card/pic-card.vue'
 </script>
 
 <template>
-  <div class="home">
-    <h1 class="text-zinc-400">
-      HELLO
-    </h1>
+  <div class="flex">
     <PicCard>
       <ul>
-        <li v-for="idx in 100" :key="idx">
+        <li v-for="idx in 10" :key="idx">
           {{ idx }}
         </li>
       </ul>

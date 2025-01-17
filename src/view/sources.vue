@@ -2,8 +2,10 @@
 </script>
 
 <template>
-  <div class="p-4">
-    <slot />
+  <div class="source">
+    <h1 class="text-zinc-400">
+      SOURCE
+    </h1>
   </div>
 </template>
 
