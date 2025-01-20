@@ -1,5 +1,5 @@
 import Layout from '@/layout/index.vue'
-import { createMemoryHistory, createRouter, type RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 const routes = [
   {
@@ -8,17 +8,17 @@ const routes = [
     redirect: '/home',
     children: [
       {
-        path: '/home',
+        path: 'home',
         name: 'HOME',
         component: () => import('@/view/home.vue'),
       },
       {
-        path: '/notes',
+        path: 'notes',
         name: 'NOTES',
         component: () => import('@/view/notes.vue'),
       },
       {
-        path: '/source',
+        path: 'source',
         name: 'SOURCES',
         component: () => import('@/view/sources.vue'),
       },
@@ -27,7 +27,7 @@ const routes = [
 ] as RouteRecordRaw[]
 
 const router = createRouter({
-  history: createMemoryHistory(),
+  history: createWebHistory(),
   routes,
 })
 

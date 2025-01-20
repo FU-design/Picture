@@ -3,18 +3,31 @@ import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-
+export default defineConfig(({ command, mode }) => {
+  console.log('command :>> ', command)
+  console.log('mode :>> ', mode)
+  return {
+    plugins: [vue()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
       },
     },
-  },
+    server: {
+      host: '0.0.0.0',
+      port: 86,
+      hmr: true,
+      open: true,
+      proxy: {
+        '/api': {
+          target: 'http://127.0.0.1:86',
+          changeOrigin: true,
+          ws: true,
+          rewrite: path => path.replace(/^\/api/, ''),
+        },
+      },
+    },
+    css: {
+    },
+  }
 })
