@@ -13,9 +13,9 @@ function onClick(name: RouteRecordNameGeneric) {
 </script>
 
 <template>
-  <header class=" sticky top-0 w-fullh-10 backdrop-blur-sm bg-slate-200/10">
-    <section class="w-auto h-full flex  gap-16 justify-center p-2">
-      <div v-for="{ name } in routes" :key="name" :class="{ 'text-black bg-yellow-400': route.name === name }" class="rounded-lg font-semibold cursor-pointer leading-10" @click="onClick(name)">
+  <header class="pic-header">
+    <section class="pic-header-item-wrp">
+      <div v-for="{ name } in routes" :key="name" :class="{ 'text-black bg-yellow-400': route.name === name }" class="pic-header-item" @click="onClick(name)">
         <span class="p-2 rounded-lg">
           {{ name }}
         </span>
@@ -24,5 +24,16 @@ function onClick(name: RouteRecordNameGeneric) {
   </header>
 </template>
 
-<style scoped>
+<style lang="scss"  scoped>
+.pic-header{
+  @apply sticky top-0 w-full h-10 backdrop-blur-sm bg-slate-200/10
+}
+
+.pic-header-item-wrp{
+  @apply w-auto h-full flex  gap-16 justify-center p-2
+}
+
+.pic-header-item{
+  @apply rounded-lg font-semibold cursor-pointer leading-10
+}
 </style>

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import PicCard from '@/components/pic-card/pic-card.vue'
+import PicView from '@/components/pic-view/pic-view.vue'
 </script>
 
 <template>
   <div class="flex">
-    <PicCard>
+    <PicView>
       <ul>
-        <li v-for="idx in 10" :key="idx">
+        <li v-for="idx in 60" :key="idx">
           {{ idx }}
         </li>
       </ul>
-    </PicCard>
+    </PicView>
   </div>
 </template>
 
