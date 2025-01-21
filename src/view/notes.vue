@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PicCard from '@/components/pic-card/pic-card.vue'
 </script>
 
 <template>
@@ -6,6 +7,7 @@
     <h1 class="text-zinc-400">
       NOTES
     </h1>
+    <PicCard />
   </div>
 </template>
 
