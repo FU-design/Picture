@@ -1,10 +1,13 @@
+@import '@/styles/marked.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
- background-color: theme(backgroundColor.black);
- color: theme(textColor.white)
+ position: relative;
+ background-color: theme(backgroundColor.white);
+ color: theme(textColor.black);
+ background-image: url('@/assets/grid.svg');
 }
 
 
