@@ -1,3 +1,11 @@
+---
+Created At: 2025/1/22 16:56:45
+Updated At: 2025/1/22 16:56:45
+File Name: TagTextMixInput 组件封装
+---
+
+# TagTextMixInput 组件封装
+
 ## [window.getSelection](https://developer.mozilla.org/en-US/docs/Web/API/Window/getSelection)
 
 `getSelection()`方法返回一个 `Selection` 对象，表示用户选择的文本及其范围。
