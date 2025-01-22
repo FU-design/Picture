@@ -12,10 +12,10 @@ function onClick(name: RouteRecordNameGeneric) {
 </script>
 
 <template>
-  <header class="sticky top-0 w-full max-h-20 backdrop-blur-sm bg-black/20 z-10">
+  <header class="bg-white/90 backdrop-blur backdrop-filter sticky top-0 z-10 lg:py-0">
     <section class="w-auto h-full flex gap-16 justify-center p-2">
-      <div v-for="{ name } in routes" :key="name" :class="{ 'text-black bg-white/60': route.name === name }" class="rounded-lg font-semibold cursor-pointer p-1" @click="onClick(name)">
-        <div class="rounded-lg">
+      <div v-for="{ name } in routes" :key="name" :class="[route.name === name ? 'text-black' : 'text-gray-400']" class="rounded-lg cursor-pointer p-1" @click="onClick(name)">
+        <div class="inline-flex flex-1 justify-center transition-all">
           {{ name }}
         </div>
       </div>

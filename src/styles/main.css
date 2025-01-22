@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
  position: relative;
  background-color: theme(backgroundColor.white);
@@ -10,4 +11,7 @@
  background-image: url('@/assets/grid.svg');
 }
 
+.bg-gh-marketingDark{
+  background-color:rgba(5,13,33,1)
+}
 

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="min-w-40 border border-white/50 rounded-2xl">
+  <div class="min-w-40 bg-white border border-black/10 rounded-lg mb-4">
     <slot name="header" />
     <div class="p-4">
       <slot />
