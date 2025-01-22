@@ -10,6 +10,8 @@
       "@assets/*": ["src/assets/*"]
     },
 
+    "types": ["node"],
+
     /* Linting */
     "strict": true, // 检查并报错未使用的函数参数。
     "noFallthroughCasesInSwitch": true,

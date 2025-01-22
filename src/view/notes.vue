@@ -18,7 +18,7 @@ onMounted(() => {
 <template>
   <picView>
     <PicCard v-for="(note, idx) in notes" :key="idx">
-      <a class="text-zinc-600 hover:text-black" href="#" @click="openNote(note)">
+      <a class="text-zinc-600 hover:text-gray-300" href="#" @click.prevent="openNote(note)">
         {{ note.title }}
       </a>
     </PicCard>

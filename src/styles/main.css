@@ -6,9 +6,8 @@
 
 :root {
  position: relative;
- background-color: theme(backgroundColor.white);
- color: theme(textColor.black);
- background-image: url('@/assets/grid.svg');
+ background-color: theme(backgroundColor.slate.950);
+ color: theme(textColor.white);
 }
 
 .bg-gh-marketingDark{
