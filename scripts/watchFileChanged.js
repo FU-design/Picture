@@ -1,6 +1,8 @@
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import chokidar from 'chokidar'
 import { glob } from 'glob'
+
+let isWriting = false // 防止循环写入
 
 /**
  *
@@ -16,28 +18,29 @@ function matchWatchFiles(path) {
   return files
 }
 
-function onFileChanged(filePath) {
-  console.log(`文件 ${filePath} 发生了变化，正在检查是否需要更新...`)
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(`读取文件 ${filePath} 时出错:`, err)
-      return
-    }
+async function onFileChanged(filePath) {
+  if (isWriting)
+    return
+  try {
+    const data = await fs.readFile(filePath, 'utf8')
+
+    isWriting = true
 
     const currentTime = new Date().toLocaleString()
     const updatedData = data.replace(
-      /Updated At: \d{4}\/\d{1,2}\/\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}/,
+      /Updated At: \d{4}\/\d{1,2}\/\d{1,2} \d{1,2}:\d{2}:\d{2}/,
       `Updated At: ${currentTime}`,
     )
 
-    fs.writeFile(filePath, updatedData, 'utf8', (err) => {
-      if (err) {
-        console.error(`写入文件 ${filePath} 时出错:`, err)
-        return
-      }
-      console.log(`文件 ${filePath} 的更新时间已更新为: ${currentTime}`)
-    })
-  })
+    await fs.writeFile(filePath, updatedData, 'utf8')
+    console.log(`文件 ${filePath} 的更新时间已更新为: ${currentTime}`)
+  }
+  catch (err) {
+    console.error(`操作文件 ${filePath} 时出错:`, err)
+  }
+  finally {
+    isWriting = false
+  }
 }
 
 /**
@@ -45,17 +48,16 @@ function onFileChanged(filePath) {
  */
 function execWatcher(path = 'src/notes/**/*.md') {
   const watcher = chokidar.watch((matchWatchFiles(path)), {
-    persistent: true, // 持续监听
-    ignoreInitial: true, // 忽略初次监听
+    persistent: true,
+    ignoreInitial: true,
+    awaitWriteFinish: {
+      stabilityThreshold: 100, // 文件修改后等待时间，单位毫秒
+      pollInterval: 50,
+    },
   })
   watcher
     .on('ready', () => console.warn('Listener started'))
     .on('change', onFileChanged)
-    // .on('all', (event, path) => console.warn(`event: ${event}, filePath: ${path}`))
-    // .on('add', path => console.warn(`File add: ${path}`))
-    // .on('unlink', path => console.warn(`File delete: ${path}`))
-    // .on('error', error => console.error(`error: ${error}`))
-
   console.warn('Listening ...')
 }
 
