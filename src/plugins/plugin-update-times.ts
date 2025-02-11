@@ -7,10 +7,7 @@ import fs from 'node:fs/promises'
 export default function updateTimestampPlugin(): Plugin {
   let isWriting = false
 
-  /**
-   * 更新文件中的时间戳
-   * @param {string} filePath 文件路径
-   */
+  // 更新文件中的时间戳
   async function updateFileTimestamp(filePath: string) {
     if (isWriting)
       return
@@ -37,12 +34,18 @@ export default function updateTimestampPlugin(): Plugin {
     name: 'vite-plugin-update-timestamp',
     // Vite dev server 启动时调用
     configureServer(server) {
-      // 监听所有 `src/notes/**/*.md` 文件
       server.watcher.on('change', async (filePath) => {
-        console.warn('filePath :>> ', filePath)
         if (filePath.endsWith('.md')) {
           console.warn(`检测到文件 ${filePath} 发生变化，检查内容...`)
           await updateFileTimestamp(filePath)
+          const data = await fs.readFile(filePath, 'utf8')
+          await fs.writeFile(filePath, data, 'utf8')
+
+          // 强制 Vite 重新加载文件
+          server.ws.send({
+            type: 'full-reload',
+            path: filePath,
+          })
         }
       })
     },
