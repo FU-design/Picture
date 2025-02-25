@@ -1,3 +1,8 @@
 import antfu from '@antfu/eslint-config'
 
-export default antfu()
+// https://github.com/antfu/eslint-config
+export default antfu({
+  rules: {
+    'no-debugger': 'off',
+  },
+})
