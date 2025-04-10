@@ -6,8 +6,8 @@
 
 :root {
  position: relative;
- background-color: theme(backgroundColor.slate.950);
- color: theme(textColor.white);
+ background-color: theme(backgroundColor.white);
+ color: theme(textColor.black);
 }
 
 .bg-gh-marketingDark{
