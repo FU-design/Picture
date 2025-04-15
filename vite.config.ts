@@ -1,14 +1,14 @@
 import path from 'node:path'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
-import updateTimestampPlugin from './src/plugins/plugin-update-times'
+// import updateTimestampPlugin from './src/plugins/plugin-update-times'
 
 // https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {
   console.log('command :>> ', command)
   console.log('mode :>> ', mode)
   return {
-    plugins: [vue(), updateTimestampPlugin()],
+    plugins: [vue()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),

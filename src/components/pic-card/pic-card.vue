@@ -3,9 +3,9 @@
 </script>
 
 <template>
-  <div class="min-w-40 border-black/10 rounded-lg mb-4">
+  <div class="pic-card">
     <slot name="header" />
-    <div class="p-4">
+    <div>
       <slot />
     </div>
     <slot name="footer" />
