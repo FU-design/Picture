@@ -1,29 +1,35 @@
 <script setup lang="ts">
-import PicCard from '@/components/pic-card/pic-card.vue'
-import picView from '@/components/pic-view/pic-view.vue'
+import PicButton from '@/components/pic-button/pic-button.vue'
+import PicView from '@/components/pic-view/pic-view.vue'
 import { type NoteType, useNotes } from '@/composables/useNotes'
 import { onMounted } from 'vue'
 
 const { notes, setupNotes } = useNotes()
 
-function openNote(note: NoteType) {
+async function openNote(note: NoteType) {
   console.warn('note :>> ', note)
 }
+
 onMounted(() => {
   setupNotes()
-  console.warn(notes)
 })
 </script>
 
 <template>
-  <picView>
-    <PicCard v-for="(note, idx) in notes" :key="idx">
-      <a class="text-zinc-600 hover:text-gray-300" href="#" @click.prevent="openNote(note)">
-        {{ note.title }}
-      </a>
-    </PicCard>
-  </picView>
+  <PicView>
+    <div class="note-wrap">
+      <PicButton v-for="(note, idx) in notes" :key="idx" @click.prevent="openNote(note)">
+        <span>
+          {{ note.title }}
+        </span>
+      </PicButton>
+    </div>
+  </PicView>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.note-wrap{
+  display: grid;
+  gap: 16px;
+}
 </style>

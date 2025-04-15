@@ -14,20 +14,20 @@ export default defineConfig(({ command, mode }) => {
         '@': path.resolve(__dirname, './src'),
       },
     },
-    server: {
-      host: '0.0.0.0',
-      port: 86,
-      hmr: true,
-      // open: true,
-      proxy: {
-        '/api': {
-          target: 'http://127.0.0.1:86',
-          changeOrigin: true,
-          ws: true,
-          rewrite: path => path.replace(/^\/api/, ''),
-        },
-      },
-    },
+    // server: {
+    //   host: '0.0.0.0',
+    //   port: 86,
+    //   hmr: true,
+    //   // open: true,
+    //   proxy: {
+    //     '/api': {
+    //       target: 'http://127.0.0.1:86',
+    //       changeOrigin: true,
+    //       ws: true,
+    //       rewrite: path => path.replace(/^\/api/, ''),
+    //     },
+    //   },
+    // },
     css: {
     },
   }
