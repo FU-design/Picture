@@ -1,9 +1,3 @@
----
-Created At: 2025/1/23 16:16:59
-Updated At: 2025/1/23 16:16:59
-File Name: windows 鼠标hover选项卡片边框高亮效果
----
-
 # windows 鼠标hover选项卡片边框高亮效果（待改进）
 
 ```html

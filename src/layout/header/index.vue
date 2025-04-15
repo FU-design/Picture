@@ -4,13 +4,13 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const routes = computed(() => router.getRoutes().filter(v => v.name))
+const routes = computed(() => router.getRoutes().filter(v => v.meta.menu))
 </script>
 
 <template>
   <header>
-    <div v-for="{ name } in routes" :key="name" @click="() => $router.push({ name })">
-      <PicButton> {{ name }}</PicButton>
+    <div v-for="(route, index) in routes" :key="index" @click="() => $router.push({ path: (route.redirect || route.path) as string })">
+      <PicButton> {{ route.meta.name }}</PicButton>
     </div>
   </header>
 </template>

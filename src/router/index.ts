@@ -9,24 +9,39 @@ const routes = [
     children: [
       {
         path: 'home',
-        name: 'HOME',
         component: () => import('@/view/home.vue'),
+        meta: {
+          menu: true,
+          name: 'HOME',
+        },
       },
       {
         path: 'notes',
-        name: 'NOTES',
-        component: () => import('@/view/notes.vue'),
+        redirect: '/notes/all',
         children: [
           {
-            path: '/:tag/:title',
+            path: 'all',
+            name: 'NoteList',
+            component: () => import('@/view/notes.vue'),
+          },
+          {
+            path: ':tag/:title',
             name: 'NoteDetail',
+            component: () => import('@/composables/useNoteDetail'),
           },
         ],
+        meta: {
+          name: 'NOTES',
+          menu: true,
+        },
       },
       {
         path: 'source',
-        name: 'SOURCES',
         component: () => import('@/view/sources.vue'),
+        meta: {
+          name: 'SOURCES',
+          menu: true,
+        },
       },
     ],
   },

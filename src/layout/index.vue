@@ -7,7 +7,7 @@ import LayoutMain from '@/layout/main/index.vue'
   <div>
     <LayoutHeader />
     <LayoutMain>
-      <RouterView />
+      <RouterView :key="$route.fullPath" />
     </LayoutMain>
   </div>
 </template>

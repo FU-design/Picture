@@ -19,37 +19,36 @@ const markdownContent = computed(() => parseMDByHighlight(markRaw.value))
 function copyCode(code: string) {
   copyText(code)
     .then(() => {
+      console.warn('Copied!')
     })
     .catch((err: Error) => {
-      console.error('err :>> ', err)
+      console.warn('Failed!', err)
     })
 }
 
 async function upgradeCodeBlock(el: HTMLElement) {
-  await nextTick() // 静态 markdown 文件解析时需要添加
+  await nextTick()
   const pres = el.querySelectorAll('pre')
   pres.forEach((pre) => {
     const code = pre.querySelector('code')
     const langTag = pre.querySelector('#language')
     const copyTag = pre.querySelector('#copy')
 
-    langTag!.textContent = (
-      code?.classList.value.replace('hljs language-', '') as string
-    ).toLowerCase()
+    langTag!.textContent = (code?.classList.value.replace('hljs language-', '') as string).toLowerCase()
     copyTag && copyTag.removeEventListener('click', () => copyCode(code?.textContent || ''))
     copyTag?.addEventListener('click', () => copyCode(code?.textContent || ''))
   })
 }
 
 function upgradedCodeBlock(parsedMarked: string) {
-  const upgradeParts = `<pre style="padding:0"><div class="code-block-head"><label id="language" :key="${Date.now()}">Code</label><button id="copy">copy</button></div>`
+  const upgradeParts = `<pre style="padding:0"><div class="code-block-head"><label id="language">Code</label><button id="copy">Copy</button></div>`
   return parsedMarked.replace(/<pre>/g, upgradeParts)
 }
 
 function getMarkedHighlightOps() {
   return markedHighlight({
     langPrefix: 'hljs language-',
-    highlight(code: string, lang: string) {
+    highlight(code, lang) {
       const language = hljs.getLanguage(lang) ? lang : 'plaintext'
       return hljs.highlight(code, { language }).value
     },
@@ -62,7 +61,7 @@ function parseMDByHighlight(content: string) {
 }
 
 const vUpgradeCodeBlock = {
-  // updated: upgradeCodeBlock,
+  updated: upgradeCodeBlock,
   mounted: upgradeCodeBlock,
 }
 </script>

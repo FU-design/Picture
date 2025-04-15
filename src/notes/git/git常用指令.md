@@ -1,9 +1,3 @@
----
-Created At: 2025/1/22 16:55:48
-Updated At: 2025/1/22 16:55:48
-File Name: git 常用指令
----
-
 # git 常用指令
 
 #### 以 SSH 方式 clone 的远程仓库
