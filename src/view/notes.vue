@@ -4,10 +4,10 @@ import PicView from '@/components/pic-view/pic-view.vue'
 import { type NoteType, useNotes } from '@/composables/useNotes'
 import { onMounted } from 'vue'
 
-const { notes, setupNotes } = useNotes()
+const { notes, setupNotes, updateRouterOfNote } = useNotes()
 
 async function openNote(note: NoteType) {
-  console.warn('note :>> ', note)
+  updateRouterOfNote(note)
 }
 
 onMounted(() => {

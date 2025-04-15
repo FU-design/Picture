@@ -16,6 +16,12 @@ const routes = [
         path: 'notes',
         name: 'NOTES',
         component: () => import('@/view/notes.vue'),
+        children: [
+          {
+            path: '/:tag/:title',
+            name: 'NoteDetail',
+          },
+        ],
       },
       {
         path: 'source',
