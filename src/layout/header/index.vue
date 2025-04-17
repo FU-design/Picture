@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BlogLogo from '@/components/hoc/blogLogo'
 import PicButton from '@/components/pic-button/pic-button.vue'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -9,9 +10,7 @@ const routes = computed(() => router.getRoutes().filter(v => v.meta.menu))
 
 <template>
   <header>
-    <!-- <div class="blog-logo">
-      <img src="../../assets/logo.png" alt="">
-    </div> -->
+    <BlogLogo />
     <nav>
       <div v-for="(route, index) in routes" :key="index" @click="() => $router.push({ path: (route.redirect || route.path) as string })">
         <PicButton> {{ route.meta.name }}</PicButton>
@@ -34,14 +33,6 @@ header{
     flex-wrap: wrap;
     gap: 8px;
     line-height: 60px;
-  }
-  .blog-logo{
-    height: 100%;
-    img{
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
   }
 }
 </style>

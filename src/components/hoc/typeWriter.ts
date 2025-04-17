@@ -1,6 +1,6 @@
 import { useTypeWriter } from '@/composables/useTypeWriter'
 import { defineComponent, h, onMounted } from 'vue'
-import '../../styles/type-writer.css'
+import '@/styles/type-writer.css'
 
 export default defineComponent({
   name: 'TypeWriter',
