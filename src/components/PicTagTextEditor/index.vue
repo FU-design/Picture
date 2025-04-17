@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<TagTextEditorProps>(), {
 const emits = defineEmits<TagTextEditorEmits>()
 const range = ref<Range | null>(null)
 const tagTextEditorRef = ref<HTMLElement>()
+const allowedKeys = shallowRef(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Home', 'End', 'PageUp', 'PageDown'])
 
 function onFocus(e: Event) {
   const selection = window.getSelection()
@@ -26,6 +27,29 @@ function onBlur(e: Event) {
   emits('blur', e)
 }
 
+function preventInput(e: KeyboardEvent) {
+  if (!allowedKeys.value.includes(e.key)) {
+    e.preventDefault()
+  }
+}
+
+function preventPaste(e: ClipboardEvent) {
+  e.preventDefault()
+}
+
+function setupContents() {
+  if (props.contents.length <= 0) {
+    return
+  }
+  const fragment = document.createDocumentFragment()
+  for (const content of props.contents) {
+    fragment.appendChild(createContent(content))
+  }
+  tagTextEditorRef.value?.appendChild(fragment)
+}
+
+// ----------- Operate dom by selection -------------
+
 function restSelection(selection: Selection | null) {
   if (!selection) {
     return
@@ -36,43 +60,6 @@ function restSelection(selection: Selection | null) {
   range.value.collapse(false)
   selection?.removeAllRanges()
   selection?.addRange(range.value)
-}
-
-function preventInput(e: KeyboardEvent) {
-  const allowedKeys = [
-    'ArrowLeft',
-    'ArrowRight',
-    'ArrowUp',
-    'ArrowDown',
-    'Tab',
-    'Shift',
-    'Control',
-    'Alt',
-    'Meta',
-    'Home',
-    'End',
-    'PageUp',
-    'PageDown',
-  ]
-  if (!allowedKeys.includes(e.key)) {
-    e.preventDefault()
-  }
-}
-
-function preventPaste(e: ClipboardEvent) {
-  e.preventDefault()
-}
-
-function setupContents() {
-  const len = props.contents.length
-  if (len <= 0) {
-    return
-  }
-  const fragment = document.createDocumentFragment()
-  for (const content of props.contents) {
-    fragment.appendChild(createContent(content))
-  }
-  tagTextEditorRef.value?.appendChild(fragment)
 }
 
 function insertTag(item: ContentItem) {
