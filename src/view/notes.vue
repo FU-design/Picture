@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PicButton from '@/components/PicButton/pic-button.vue'
-import PicView from '@/components/PicView/pic-view.vue'
+import PicButton from '@/components/PicButton/index.vue'
+import PicView from '@/components/PicView/index.vue'
 import { type NoteType, useNotes } from '@/composables/useNotes'
 import { onMounted } from 'vue'
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BlogLogo from '@/components/hoc/blogLogo'
-import PicButton from '@/components/PicButton/pic-button.vue'
+import PicButton from '@/components/PicButton/index.vue'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 

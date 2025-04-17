@@ -36,6 +36,21 @@ const routes = [
         },
       },
       {
+        path: 'components',
+        redirect: '/components/all',
+        children: [
+          {
+            path: 'all',
+            name: 'componentList',
+            component: () => import('@/view/components.vue'),
+          },
+        ],
+        meta: {
+          name: 'COMPONENTS',
+          menu: true,
+        },
+      },
+      {
         path: 'source',
         component: () => import('@/view/sources.vue'),
         meta: {
