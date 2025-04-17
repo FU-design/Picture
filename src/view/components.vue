@@ -1,14 +1,28 @@
 <script setup lang="ts">
+import type { ContentItem } from '@/components/PicTagTextEditor/type'
 import PicCard from '@/components/PicCard/index.vue'
 import PicTagTextEditor from '@/components/PicTagTextEditor/index.vue'
-import { type ComponentPublicInstance, reactive, shallowRef, type VNodeRef, watch } from 'vue'
+import { reactive, ref, type Ref, type VNodeRef, watch } from 'vue'
 
 type PicTagTextEditorType = InstanceType<typeof PicTagTextEditor>
 
-const data = reactive([
+const data = reactive<{ id: number, testContents: ContentItem[] }[]>([
   {
     id: 0,
-    testContents: [],
+    testContents: [
+      {
+        type: 'tag',
+        text: 'welcome world !',
+      },
+      {
+        type: 'tag',
+        text: 'hello',
+      },
+      {
+        type: 'tag',
+        text: 'who are you !',
+      },
+    ],
   },
   {
     id: 1,
@@ -19,19 +33,17 @@ const data = reactive([
     testContents: [],
   },
 ])
-const picTagTextEditorRef = shallowRef<PicTagTextEditorType>()
-
-function editorRefCollection(ref: ComponentPublicInstance): VNodeRef | undefined {
-  picTagTextEditorRefs.value.push(ref as ComponentPublicInstance<PicTagTextEditorType>)
-  return undefined
-}
+const picTagTextEditorRef = ref<PicTagTextEditorType>()
 
 watch(() => data, (val) => {
   console.warn('val :>> ', val)
 })
 
-function onfocus(e, currentInstance) {
-  picTagTextEditorRef.value = currentInstance
+function onfocus($ref: VNodeRef | undefined) {
+  picTagTextEditorRef.value = ($ref as Ref<PicTagTextEditorType>).value
+}
+
+function onblur() {
 }
 </script>
 
@@ -43,7 +55,7 @@ function onfocus(e, currentInstance) {
           {{ `Editor ${index}` }}
         </div>
       </template>
-      <PicTagTextEditor :ref="editorRefCollection" v-model:contents="item.testContents" @focus="onfocus" />
+      <PicTagTextEditor v-model:contents="item.testContents" type="select" @focus="onfocus" @blur="onblur" />
     </PicCard>
   </div>
 </template>

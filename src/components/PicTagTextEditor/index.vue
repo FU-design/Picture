@@ -1,32 +1,9 @@
 <script setup lang="ts">
-import { type ComponentPublicInstance, onMounted, onUnmounted, ref, shallowRef, type VNodeRef } from 'vue'
-
-type CreateType = 'tag' | 'text'
-
-export interface ContentItem {
-  type: CreateType
-  text: string
-  [propKey: string]: unknown
-}
-
-export interface TagTextEditorProps {
-  contents: ContentItem[]
-  disabled?: boolean
-  placeholder?: string
-}
-
-export interface TagTextEditorEmits {
-  (event: 'focus', e?: Event, currentInstance?: Element, ...args: any[]): void
-  (event: 'blur', ...args: any[]): void
-  (event: 'update:contents', ...args: any[]): void
-}
-
-export interface ListItem {
-  inputContent: ContentItem[]
-  [propKey: string]: unknown
-}
+import type { ContentItem, CreateType, TagTextEditorEmits, TagTextEditorProps } from './type'
+import { onMounted, onUnmounted, ref, shallowRef } from 'vue'
 
 const props = withDefaults(defineProps<TagTextEditorProps>(), {
+  type: 'textarea',
   disabled: false,
   placeholder: 'Please input ....',
   contents: () => { return [] },
@@ -34,14 +11,14 @@ const props = withDefaults(defineProps<TagTextEditorProps>(), {
 
 const emits = defineEmits<TagTextEditorEmits>()
 const range = ref<Range | null>(null)
-const tagTextEditorRef = ref<Element>()
+const tagTextEditorRef = ref<HTMLElement>()
 
 function onFocus(e: Event) {
   const selection = window.getSelection()
   if (!['I'].includes(selection?.focusNode?.parentNode?.nodeName || '')) {
     restSelection(selection)
   }
-  emits('focus', e, tagTextEditorRef.value)
+  emits('focus', tagTextEditorRef, e)
 }
 
 function onBlur(e: Event) {
@@ -61,14 +38,39 @@ function restSelection(selection: Selection | null) {
   selection?.addRange(range.value)
 }
 
+function preventInput(e: KeyboardEvent) {
+  const allowedKeys = [
+    'ArrowLeft',
+    'ArrowRight',
+    'ArrowUp',
+    'ArrowDown',
+    'Tab',
+    'Shift',
+    'Control',
+    'Alt',
+    'Meta',
+    'Home',
+    'End',
+    'PageUp',
+    'PageDown',
+  ]
+  if (!allowedKeys.includes(e.key)) {
+    e.preventDefault()
+  }
+}
+
+function preventPaste(e: ClipboardEvent) {
+  e.preventDefault()
+}
+
 function setupContents() {
   const len = props.contents.length
   if (len <= 0) {
     return
   }
   const fragment = document.createDocumentFragment()
-  for (let i = 0; i < len; i++) {
-    fragment.appendChild(createContent(props.contents[i]))
+  for (const content of props.contents) {
+    fragment.appendChild(createContent(content))
   }
   tagTextEditorRef.value?.appendChild(fragment)
 }
@@ -115,11 +117,15 @@ function createContent(contentItem: ContentItem): Node {
 function setupEvent() {
   tagTextEditorRef.value?.addEventListener('focus', onFocus)
   tagTextEditorRef.value?.addEventListener('blur', onBlur)
+  tagTextEditorRef.value?.addEventListener('paste', preventPaste)
+  props.type === 'select' && tagTextEditorRef.value?.addEventListener('keydown', preventInput)
 }
 
 function removeAllEvent() {
   tagTextEditorRef.value?.removeEventListener('focus', onFocus)
   tagTextEditorRef.value?.removeEventListener('blur', onBlur)
+  tagTextEditorRef.value?.removeEventListener('paste', preventPaste)
+  props.type === 'select' && tagTextEditorRef.value?.removeEventListener('keydown', preventInput)
 }
 
 onMounted(() => {
@@ -152,11 +158,13 @@ defineExpose({
   --input-bg: #ddd;
   --input-bg-focus: #fff;
   --input-border-hover: #bbb;
-  --input-border-focus: #80bdff;
+  --input-border-focus: rgba(0,123,255,1);
   --input-bg-disabled: #e9ecef;
   --input-border-error: #dc3545;
   --input-text: #212529;
   --input-placeholder: #6c757d;
+  --tag-text: #000;
+  --tag-border: #000;
 }
 
 .tag-text-editor--deactive {
@@ -171,6 +179,7 @@ defineExpose({
   display: block;
   overflow: hidden;
   white-space: nowrap;
+  cursor: text;
   text-overflow: ellipsis;
 }
 
@@ -180,7 +189,7 @@ defineExpose({
 
 .tag-text-editor:focus {
   outline: none;
-  box-shadow: 0 0 0 1px rgba(0,123,255,1);
+  box-shadow: 0 0 0 1px var(--input-border-focus);
   background-color: var(--input-bg-focus);
 }
 
@@ -189,13 +198,19 @@ defineExpose({
 }
 
 .tag {
-  padding: 1px 4px;
-  margin: 2px;
+  padding-inline: 4px;
+  margin-inline: 2px;
   display: inline-block;
-  line-height: 1.5;
   border-radius: 4px;
-  color: #000;
-  border: 1px solid #000;
+  color: var(--tag-text);
+  box-shadow: 0 0 0 1px var(--tag-border);
+  box-sizing: border-box;
+  border-color: transparent;
+  line-height: normal;
+
+ /* 核心：启用边框断裂效果 */
+ -webkit-box-decoration-break: slice; /* 默认值，可省略 */
+  box-decoration-break: slice;
 }
 
 .tag-text-editor {
@@ -203,15 +218,19 @@ defineExpose({
   width: 100%;
   height: 100%;
   border-radius: 4px;
-  padding: 8px;
+  padding: 6px;
   border-width: 1px;
   border-style: solid;
-  border-radius: 4;
-  transition: all 0.2s;
+  border-radius: 4px;
   overflow: auto;
-  white-space: normal;
   background-color: var(--input-bg);
   color: var(--input-text);
   transition: border-color 0.15s, box-shadow 0.15s;
+  line-height: 1.5;
+
+  /* key of resolve content wrap */
+  white-space: normal;
+  word-break: break-all;   /* 强制所有单词在任意字符间断行 */
+  overflow-wrap: break-word; /* 优先在单词内部换行（兼容性更好） */
 }
 </style>

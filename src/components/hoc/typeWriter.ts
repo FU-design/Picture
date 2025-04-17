@@ -17,6 +17,6 @@ export default defineComponent({
     onMounted(() => {
       startWriter()
     })
-    return () => h('div', { class: 'typewriter-container' }, [h('span', { ref: textRef, class: 'text' }), h('span', { class: 'cursor' })])
+    return () => h('div', { class: 'typewriter-container' }, [h('span', { ref: textRef, class: 'text' })])
   },
 })
