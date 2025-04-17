@@ -1,5 +1,5 @@
-import PicMd from '@/components/pic-md/pic-md.vue'
-import PicView from '@/components/pic-view/pic-view.vue'
+import PicMd from '@/components/PicMd/pic-md.vue'
+import PicView from '@/components/PicView/pic-view.vue'
 import { useNotes } from '@/composables/useNotes'
 import { defineComponent, h, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
