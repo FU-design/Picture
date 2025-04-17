@@ -1,10 +1,10 @@
 import PicMd from '@/components/pic-md/pic-md.vue'
 import PicView from '@/components/pic-view/pic-view.vue'
 import { useNotes } from '@/composables/useNotes'
-import { h, onMounted, ref } from 'vue'
+import { defineComponent, h, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-export default {
+export default defineComponent({
   name: 'NoteDetail',
   setup() {
     const route = useRoute()
@@ -21,4 +21,6 @@ export default {
       h(PicView, {}, () =>
         h(PicMd, { markRaw: mdContent.value }))
   },
-}
+},
+
+)

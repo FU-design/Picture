@@ -27,7 +27,7 @@ const routes = [
           {
             path: ':tag/:title',
             name: 'NoteDetail',
-            component: () => import('@/composables/useNoteDetail'),
+            component: () => import('@/components/hoc/noteDetail'),
           },
         ],
         meta: {
