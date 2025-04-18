@@ -10,15 +10,28 @@ const props = withDefaults(defineProps<TagTextEditorProps>(), {
 })
 
 const emits = defineEmits<TagTextEditorEmits>()
+
+const nodeInfo = {
+  attributes: true,
+  childList: true,
+  subtree: true,
+  characterData: true, // 修改字符是否发生改变(默认false)
+} as const
+
 const range = ref<Range | null>(null)
 const tagTextEditorRef = ref<HTMLElement>()
+const observer = ref<MutationObserver | null>()
 const allowedKeys = shallowRef(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Home', 'End', 'PageUp', 'PageDown'])
+const contentTypeMap = shallowRef<Record<CreateType, (contentItem: ContentItem) => Node>>({
+  tag: (contentItem: ContentItem) => createTag(contentItem),
+  text: (contentItem: ContentItem) => createText(contentItem),
+})
 
 function onFocus(e: Event) {
-  const selection = window.getSelection()
-  if (!['I'].includes(selection?.focusNode?.parentNode?.nodeName || '')) {
-    restSelection(selection)
+  if (!observer.value) {
+    observer.value = new MutationObserver(handleObserver)
   }
+  observer.value?.observe(tagTextEditorRef.value!, nodeInfo)
   emits('focus', tagTextEditorRef, e)
 }
 
@@ -33,8 +46,57 @@ function preventInput(e: KeyboardEvent) {
   }
 }
 
-function preventPaste(e: ClipboardEvent) {
+function onPaste(e: ClipboardEvent) {
   e.preventDefault()
+}
+
+// 确保点击不可编辑元素附近时调整光标（兼容FireFox）
+function onClick() {
+  const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
+  if (!isFirefox) {
+    return
+  }
+  const selection = window.getSelection()
+  range.value = selection?.getRangeAt(0) || document.createRange()
+  const parentElement = range.value?.endContainer.parentElement
+  if (parentElement && [...parentElement.classList || []].includes('tag')) {
+    parentElement?.after(createPlaceholder())
+    selection?.removeAllRanges()
+    range.value = document.createRange()
+    range.value?.setStart(parentElement.nextSibling!, 0)
+    range.value.collapse()
+    selection?.addRange(range.value)
+  }
+}
+
+function handleObserver(mutations: MutationRecord[], _observer: MutationObserver) {
+  mutations.forEach((mutation) => {
+    if (mutation.type === 'childList') {
+      console.warn('childList :>> ')
+      // 兼容 FireFox
+      const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
+      if (!isFirefox) {
+        return
+      }
+      const childNodes = tagTextEditorRef.value!.childNodes
+      if (childNodes.length > 0) {
+        const firstChild = tagTextEditorRef.value?.firstChild
+        if (firstChild?.nodeType !== Node.TEXT_NODE) {
+          tagTextEditorRef.value?.insertBefore(createPlaceholder(), firstChild as Node)
+        }
+      }
+      // 彻底清空输入框无用内容
+      if (tagTextEditorRef.value?.lastChild?.nodeName === 'BR') {
+        tagTextEditorRef.value.innerHTML = ''
+      }
+    }
+    if (mutation.type === 'attributes') {
+      console.warn('attributes :>> ')
+    }
+    if (mutation.type === 'characterData') {
+      console.warn('characterData :>> ')
+    }
+  })
 }
 
 function setupContents() {
@@ -42,6 +104,9 @@ function setupContents() {
     return
   }
   const fragment = document.createDocumentFragment()
+  // 兼容 FireFox
+  const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
+  isFirefox && fragment.append(createPlaceholder())
   for (const content of props.contents) {
     fragment.appendChild(createContent(content))
   }
@@ -49,18 +114,6 @@ function setupContents() {
 }
 
 // ----------- Operate dom by selection -------------
-
-function restSelection(selection: Selection | null) {
-  if (!selection) {
-    return
-  }
-  if (!range.value) {
-    range.value = document.createRange()
-  }
-  range.value.collapse(false)
-  selection?.removeAllRanges()
-  selection?.addRange(range.value)
-}
 
 function insertTag(item: ContentItem) {
   if (!range.value) {
@@ -78,17 +131,18 @@ function insertTag(item: ContentItem) {
 
 // --------------- Create content -----------------
 
-const contentTypeMap = shallowRef<Record<CreateType, (contentItem: ContentItem) => Node>>({
-  tag: (contentItem: ContentItem) => createTag(contentItem),
-  text: (contentItem: ContentItem) => createText(contentItem),
-})
-
 function createTag(contentItem: ContentItem) {
+  const fragment = document.createDocumentFragment()
   const tag = document.createElement('i')
   tag.setAttribute('contenteditable', 'false')
   tag.classList.add('tag')
-  tag.innerHTML = contentItem.text
-  return tag
+  tag.textContent = contentItem.text
+  fragment.appendChild(tag)
+  return fragment
+}
+
+function createPlaceholder() {
+  return document.createTextNode('')
 }
 
 function createText(contentItem: ContentItem): Node {
@@ -104,14 +158,16 @@ function createContent(contentItem: ContentItem): Node {
 function setupEvent() {
   tagTextEditorRef.value?.addEventListener('focus', onFocus)
   tagTextEditorRef.value?.addEventListener('blur', onBlur)
-  tagTextEditorRef.value?.addEventListener('paste', preventPaste)
+  tagTextEditorRef.value?.addEventListener('paste', onPaste)
+  tagTextEditorRef.value?.addEventListener('click', onClick)
   props.type === 'select' && tagTextEditorRef.value?.addEventListener('keydown', preventInput)
 }
 
 function removeAllEvent() {
   tagTextEditorRef.value?.removeEventListener('focus', onFocus)
   tagTextEditorRef.value?.removeEventListener('blur', onBlur)
-  tagTextEditorRef.value?.removeEventListener('paste', preventPaste)
+  tagTextEditorRef.value?.removeEventListener('paste', onPaste)
+  tagTextEditorRef.value?.removeEventListener('click', onClick)
   props.type === 'select' && tagTextEditorRef.value?.removeEventListener('keydown', preventInput)
 }
 
@@ -131,13 +187,16 @@ defineExpose({
 </script>
 
 <template>
-  <div
-    ref="tagTextEditorRef"
-    class="tag-text-editor"
-    :data-placeholder="placeholder"
-    :contenteditable="true && !props.disabled"
-    :class="{ 'tag-text-editor--deactive': props.disabled }"
-  />
+  <div class="tag-text-editor-wrp">
+    <div
+      ref="tagTextEditorRef"
+      class="tag-text-editor"
+      :data-placeholder="placeholder"
+      :contenteditable="true && !props.disabled"
+      :class="{ 'tag-text-editor--deactive': props.disabled }"
+    />
+  </div>
+  <!-- <div class="select-option" /> -->
 </template>
 
 <style>
@@ -187,7 +246,7 @@ defineExpose({
 .tag {
   padding-inline: 4px;
   margin-inline: 2px;
-  display: inline-block;
+  /* display: inline-block; */
   border-radius: 4px;
   color: var(--tag-text);
   box-shadow: 0 0 0 1px var(--tag-border);
@@ -196,8 +255,19 @@ defineExpose({
   line-height: normal;
 
  /* 核心：启用边框断裂效果 */
- -webkit-box-decoration-break: slice; /* 默认值，可省略 */
-  box-decoration-break: slice;
+ box-decoration-break: slice;
+ -webkit-box-decoration-break: slice;
+}
+
+.tag-text-editor-wrp{
+  position: relative;
+}
+
+.select-option{
+  width: 100%;
+  height: 400px;
+  background-color: #e9ecef;
+  position: absolute;
 }
 
 .tag-text-editor {
@@ -217,7 +287,9 @@ defineExpose({
 
   /* key of resolve content wrap */
   white-space: normal;
-  word-break: break-all;   /* 强制所有单词在任意字符间断行 */
-  overflow-wrap: break-word; /* 优先在单词内部换行（兼容性更好） */
+  word-break: break-all;
+  overflow-wrap: break-word;
+
+  -webkit-user-modify: read-write-plaintext-only;
 }
 </style>

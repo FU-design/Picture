@@ -19,6 +19,10 @@ const data = reactive<{ id: number, testContents: ContentItem[] }[]>([
         text: 'hello',
       },
       {
+        type: 'text',
+        text: 'hello',
+      },
+      {
         type: 'tag',
         text: 'who are you !',
       },
@@ -35,8 +39,12 @@ const data = reactive<{ id: number, testContents: ContentItem[] }[]>([
 ])
 const picTagTextEditorRef = ref<PicTagTextEditorType>()
 
+// 无法直接监听到内容变化
 watch(() => data, (val) => {
   console.warn('val :>> ', val)
+}, {
+  deep: true,
+  immediate: true,
 })
 
 function onfocus($ref: VNodeRef | undefined) {
@@ -55,7 +63,7 @@ function onblur() {
           {{ `Editor ${index}` }}
         </div>
       </template>
-      <PicTagTextEditor v-model:contents="item.testContents" type="select" @focus="onfocus" @blur="onblur" />
+      <PicTagTextEditor v-model:contents="item.testContents" @focus="onfocus" @blur="onblur" />
     </PicCard>
   </div>
 </template>
