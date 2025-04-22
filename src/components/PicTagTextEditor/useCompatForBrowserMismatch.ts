@@ -19,7 +19,7 @@ export function useCompatForBrowserMismatch(tagTextEditorRef: Ref<HTMLElement | 
     }
   }
 
-  function controlCursorToBypassDefaultInput(range: Ref<Range | null>) {
+  function controlCursorToBypassDefaultInput(range: Ref<Range | undefined>) {
     const selection = window.getSelection()
     range.value = selection?.getRangeAt(0) || document.createRange()
     const parentElement = range.value?.endContainer.parentElement

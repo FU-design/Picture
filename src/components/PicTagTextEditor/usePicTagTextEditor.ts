@@ -2,7 +2,8 @@ import type { ContentItem, CreateType } from './type'
 import { type Ref, shallowRef } from 'vue'
 import { useCompatForBrowserMismatch } from './useCompatForBrowserMismatch'
 
-export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefined>, range: Ref<Range | null>) {
+export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefined>) {
+  const range = shallowRef<Range>()
   const observer = shallowRef<MutationObserver | null>()
   const allowedKeys = shallowRef(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Home', 'End', 'PageUp', 'PageDown'])
   const contentTypeMap = shallowRef<Record<CreateType, (contentItem: ContentItem) => Node>>({
@@ -45,9 +46,9 @@ export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefine
       return
     }
     const tag = createContent(item)
-    range.value.deleteContents()
     range.value.insertNode(tag)
-    tagTextEditorRef.value?.focus()
+    range.value.collapse(false)
+    resetSelectionCollapse(range.value)
   }
 
   function clearUnableDomForTagTextEditor() {
@@ -71,23 +72,42 @@ export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefine
           insertInputPlaceholder()
         }
         clearUnableDomForTagTextEditor() // 彻底清空输入框无用内容 ( 让模拟表单元素中的placeholder能够正常显示 )
+        console.warn('removedNodes :>> ', mutation.removedNodes)
+        console.warn('addedNodes :>> ', mutation.addedNodes)
+        console.warn('object :>> ', mutation)
       }
-      console.warn('childList :>> ')
       if (mutation.type === 'attributes') {
-        console.warn('attributes :>> ')
+        console.warn('attributes :>> ', mutation)
       }
       if (mutation.type === 'characterData') {
-        console.warn('characterData :>> ')
+        console.warn('characterData :>> ', mutation)
       }
     })
   }
 
+  function resetSelectionCollapse(range: Range) {
+    const selection = window.getSelection()
+    selection?.removeAllRanges() // 重新定义焦点位置
+    selection?.addRange(range)
+    tagTextEditorRef.value?.focus()
+  }
+
+  function checkAncestorContainer() {
+    const tempRange = window.getSelection()?.getRangeAt(0)
+    const isChildForContainer = tempRange?.commonAncestorContainer && tagTextEditorRef.value?.contains(tempRange.commonAncestorContainer)
+    isChildForContainer && (range.value = getSelection()?.getRangeAt(0))
+    return isChildForContainer
+  }
+
   return {
+    range,
     allowedKeys,
     setupObserver,
     createText,
     createTag,
-    createContent,
     insertTag,
+    createContent,
+    resetSelectionCollapse,
+    checkAncestorContainer,
   }
 }

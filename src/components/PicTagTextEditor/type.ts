@@ -1,5 +1,3 @@
-import type { VNodeRef } from 'vue'
-
 export type CreateType = 'tag' | 'text'
 
 export interface ContentItem {
@@ -9,6 +7,7 @@ export interface ContentItem {
 }
 
 export interface TagTextEditorProps {
+  uid: string
   contents: ContentItem[]
   type?: 'textarea' | 'select'
   disabled?: boolean
@@ -16,8 +15,8 @@ export interface TagTextEditorProps {
 }
 
 export interface TagTextEditorEmits {
-  (event: 'focus', $ref?: VNodeRef, e?: Event, ...args: any[]): void
-  (event: 'clickTag', $ref?: VNodeRef, e?: Event, ...args: any[]): void
-  (event: 'blur', $ref?: VNodeRef, ...args: any[]): void
-  (event: 'update:contents', ...args: any[]): void
+  (event: 'focus', e?: Event,): void
+  (event: 'blur', e?: Event,): void
+  (event: 'clickTag', e?: Event,): void
+  (event: 'update:contents', contents: ContentItem): void
 }

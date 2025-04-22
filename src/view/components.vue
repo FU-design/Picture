@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { ContentItem } from '@/components/PicTagTextEditor/type'
+import PicButton from '@/components/PicButton/index.vue'
 import PicCard from '@/components/PicCard/index.vue'
 import PicTagTextEditor from '@/components/PicTagTextEditor/index.vue'
-import { reactive, ref, type Ref, type VNodeRef, watch } from 'vue'
+import { reactive, ref } from 'vue'
 
 type PicTagTextEditorType = InstanceType<typeof PicTagTextEditor>
 
@@ -37,34 +38,75 @@ const data = reactive<{ id: number, testContents: ContentItem[] }[]>([
     testContents: [],
   },
 ])
-const picTagTextEditorRef = ref<PicTagTextEditorType>()
+const insertContent = ref('')
+const currPicTagTextEditorRef = ref<PicTagTextEditorType>()
+const picTagTextEditorRefs = ref<PicTagTextEditorType[]>([])
 
-// 无法直接监听到内容变化
-watch(() => data, (val) => {
-  console.warn('val :>> ', val)
-}, {
-  deep: true,
-  immediate: true,
-})
-
-function onfocus($ref: VNodeRef | undefined) {
-  picTagTextEditorRef.value = ($ref as Ref<PicTagTextEditorType>).value
+function onInput(e: Event) {
+  insertContent.value = (e?.target as any).value ?? ''
 }
 
-function onblur() {
+function onInsert() {
+  if (insertContent.value === '') {
+    console.warn('插入内容不能为空！ :>> ')
+    return
+  }
+  currPicTagTextEditorRef.value && currPicTagTextEditorRef.value.insertTag({ type: 'tag', text: insertContent.value })
+}
+
+// ------ editor -----------
+
+function onfocus(editorKey: string) {
+  for (const editor of picTagTextEditorRefs.value) {
+    editor.$props.uid === editorKey && (currPicTagTextEditorRef.value = editor)
+  }
+}
+
+function handleRef(el: unknown, index: number) {
+  el != null && (picTagTextEditorRefs.value[index] = el as PicTagTextEditorType)
+}
+
+function removeEditor(index: number, editorKey: string) {
+  data.splice(index, 1)
+  picTagTextEditorRefs.value.splice(index, 1)
+  resetCurrPicTagTextEditorRef(editorKey)
+}
+
+function resetCurrPicTagTextEditorRef(editorKey: string) {
+  const pos = picTagTextEditorRefs.value.findIndex(editor => editor.$props.uid === editorKey)
+  if (pos === -1) {
+    currPicTagTextEditorRef.value = undefined
+  }
 }
 </script>
 
 <template>
   <div class="components">
-    <PicCard v-for="(item, index) in data" :key="index" style="width: 300px;">
-      <template #header>
-        <div style="margin-bottom: 8px;">
-          {{ `Editor ${index}` }}
-        </div>
-      </template>
-      <PicTagTextEditor v-model:contents="item.testContents" @focus="onfocus" @blur="onblur" />
-    </PicCard>
+    <div>
+      <input @input="onInput">
+      <PicButton :border="true" @click="onInsert">
+        insert
+      </PicButton>
+    </div>
+    <template v-for="(item, index) in data" :key="index">
+      <PicCard style="width: 300px;">
+        <template #header>
+          <div style="margin-bottom: 8px;">
+            {{ `Editor ${index}` }}
+          </div>
+        </template>
+        <PicTagTextEditor
+          :key="item.id"
+          :ref="(el) => handleRef(el, index)"
+          v-model:contents="item.testContents"
+          :uid="`${item.id}`"
+          @focus="() => onfocus(`${item.id}`)"
+        />
+      </PicCard>
+      <PicButton :border="true" shape="circle" @click="removeEditor(index, `${item.id}`)">
+        <span> — </span>
+      </PicButton>
+    </template>
   </div>
 </template>
 
@@ -75,6 +117,6 @@ function onblur() {
   padding: 24px;
   display: flex;
   gap: 10px;
-  background-color: black;
+  flex-direction: column;
 }
 </style>

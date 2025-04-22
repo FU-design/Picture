@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TagTextEditorEmits, TagTextEditorProps } from './type'
+import type { ContentItem, TagTextEditorEmits, TagTextEditorProps } from './type'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useCompatForBrowserMismatch } from './useCompatForBrowserMismatch'
 import { usePicTagTextEditor } from './usePicTagTextEditor'
@@ -8,22 +8,25 @@ const props = withDefaults(defineProps<TagTextEditorProps>(), {
   type: 'textarea',
   disabled: false,
   placeholder: 'Please input ....',
-  contents: () => { return [] },
+  contents: (): ContentItem[] => { return [] },
 })
 const emits = defineEmits<TagTextEditorEmits>()
-const range = ref<Range | null>(null)
 const tagTextEditorRef = ref<HTMLElement>()
 const { checkNavigatorUserAgent, controlCursorToBypassDefaultInput } = useCompatForBrowserMismatch(tagTextEditorRef)
-const { allowedKeys, setupObserver, createText, createContent, insertTag } = usePicTagTextEditor(tagTextEditorRef, range)
+const { allowedKeys, range, setupObserver, createText, createContent, insertTag, checkAncestorContainer } = usePicTagTextEditor(tagTextEditorRef)
 
 function onFocus(e: Event) {
   setupObserver()
-  emits('focus', tagTextEditorRef, e)
+  emits('focus', e)
 }
 
 function onBlur(e: Event) {
-  range.value = getSelection()?.getRangeAt(0) || null
-  emits('blur', tagTextEditorRef, e)
+  checkAncestorContainer() && emits('blur', e)
+}
+
+function onClick(e: Event) {
+  checkNavigatorUserAgent('firefox') && controlCursorToBypassDefaultInput(range) // 确保点击不可编辑元素时调整光标（兼容FireFox）
+  emits('clickTag', e)
 }
 
 function preventInput(e: KeyboardEvent) {
@@ -34,11 +37,6 @@ function preventInput(e: KeyboardEvent) {
 
 function onPaste(e: ClipboardEvent) {
   e.preventDefault()
-}
-
-function onClick(e: Event) {
-  checkNavigatorUserAgent('firefox') && controlCursorToBypassDefaultInput(range) // 确保点击不可编辑元素时调整光标（兼容FireFox）
-  emits('clickTag', tagTextEditorRef, e)
 }
 
 function setupContents() {
@@ -83,6 +81,7 @@ onUnmounted(() => {
 defineExpose({
   insertTag,
   removeAllEvent,
+  getSign: () => props.uid,
 })
 </script>
 
