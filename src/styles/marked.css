@@ -2,7 +2,7 @@
 @import 'highlight.js/styles/github-dark.css';
 
 .code-block-head {
-  background: #000;
+  background: #00000017;
   display: flex;
   color: #999;
   justify-content: space-between;
@@ -27,6 +27,11 @@
 
 .markdown-body code{
   background-color: rgba(0,0,0,0.2);
+}
+
+.markdown-body pre code{
+  background-color: #000 !important;
+  border-radius: unset;
 }
 
 .markdown-body a {
