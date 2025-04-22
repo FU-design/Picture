@@ -17,6 +17,7 @@ export interface TagTextEditorProps {
 
 export interface TagTextEditorEmits {
   (event: 'focus', $ref?: VNodeRef, e?: Event, ...args: any[]): void
-  (event: 'blur', ...args: any[]): void
+  (event: 'clickTag', $ref?: VNodeRef, e?: Event, ...args: any[]): void
+  (event: 'blur', $ref?: VNodeRef, ...args: any[]): void
   (event: 'update:contents', ...args: any[]): void
 }
