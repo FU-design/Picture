@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { ContentItem, TagTextEditorEmits, TagTextEditorProps } from './type'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { useCompatForBrowserMismatch } from './useCompatForBrowserMismatch'
+import { checkNavigatorUserAgent, clearUnableDomForTagTextEditor, controlCursorToBypassDefaultInput, insertInputPlaceholder } from './tool'
+import { useMutationObserver } from './useMutationObserver'
 import { usePicTagTextEditor } from './usePicTagTextEditor'
 
 const props = withDefaults(defineProps<TagTextEditorProps>(), {
@@ -12,8 +13,14 @@ const props = withDefaults(defineProps<TagTextEditorProps>(), {
 })
 const emits = defineEmits<TagTextEditorEmits>()
 const tagTextEditorRef = ref<HTMLElement>()
-const { checkNavigatorUserAgent, controlCursorToBypassDefaultInput } = useCompatForBrowserMismatch(tagTextEditorRef)
-const { allowedKeys, range, setupObserver, createText, createContent, insertTag, checkAncestorContainer } = usePicTagTextEditor(tagTextEditorRef)
+
+const { allowedKeys, range, createText, createContent, insertTag, checkAncestorContainer } = usePicTagTextEditor(tagTextEditorRef)
+const { setupObserver } = useMutationObserver(tagTextEditorRef, {
+  childList: handleChildListChange,
+  characterData: handleCharacterDataChange,
+})
+
+// -------------------------------------------- Event CallBack --------------------------------------------
 
 function onFocus(e: Event) {
   setupObserver()
@@ -25,7 +32,8 @@ function onBlur(e: Event) {
 }
 
 function onClick(e: Event) {
-  checkNavigatorUserAgent('firefox') && controlCursorToBypassDefaultInput(range) // 确保点击不可编辑元素时调整光标（兼容FireFox）
+  // 确保点击不可编辑元素时调整光标（兼容FireFox）
+  checkNavigatorUserAgent('firefox') && controlCursorToBypassDefaultInput(range.value!)
   emits('clickTag', e)
 }
 
@@ -35,52 +43,102 @@ function preventInput(e: KeyboardEvent) {
   }
 }
 
-function onPaste(e: ClipboardEvent) {
-  e.preventDefault()
+function handleChildListChange(mutation: MutationRecord) {
+  // 确保占位元素的存在 （兼容 FireFox）
+  if (checkNavigatorUserAgent('firefox')) {
+    insertInputPlaceholder(tagTextEditorRef.value!)
+  }
+  clearUnableDomForTagTextEditor(tagTextEditorRef.value!)
+
+  const { removedNodes, addedNodes } = mutation
+  const tagChangeCommad = (removedNodes.length > 0 ? 'remove' : 'add')
+  const tag = removedNodes.length > 0 ? removedNodes[0] : addedNodes[0]
+  if (tag.textContent !== '') {
+    const tagContent: ContentItem = { type: 'tag', text: tag.textContent! }
+    emits('change', tagChangeCommad, tagContent)
+    emits('update:contents', getEditorContent())
+  }
 }
+
+function handleCharacterDataChange() {
+  // 可使用防抖（FireFox 只会触发一次，可不使用防抖）
+  emits('update:contents', getEditorContent())
+}
+
+// function onPaste(e: ClipboardEvent) {
+//   e.preventDefault()
+//   const clipboardData = e.clipboardData
+//   const text = clipboardData?.getData('text/plain') || ''
+//   const selection = window.getSelection()
+//   const range = selection?.getRangeAt(0) || document.createRange()
+//   range.deleteContents()
+//   range.insertNode(document.createTextNode(text))
+// }
+
+// -------------------------------------------- Set/Get editor content --------------------------------------------
 
 function setupContents() {
   if (props.contents.length <= 0) {
     return
   }
   const fragment = document.createDocumentFragment()
-  checkNavigatorUserAgent('firefox') && fragment.append(createText()) // 确保容器的第一个子元素为文本 (兼容 FireFox)
+  // 确保容器的第一个子元素为文本 => 占位元素 (兼容 FireFox)
+  checkNavigatorUserAgent('firefox') && fragment.append(createText())
   for (const content of props.contents) {
     fragment.appendChild(createContent(content))
   }
   tagTextEditorRef.value?.appendChild(fragment)
 }
 
-// -------------- Init/Remove event -------------------
+function getEditorContent() {
+  const editorContent = [] as ContentItem[]
+  const nodeItems = Array.from(tagTextEditorRef.value?.childNodes || [])
+  for (const item of nodeItems) {
+    if (!item.textContent) {
+      continue
+    }
+    if (item.nodeType === Node.TEXT_NODE) {
+      editorContent.push({ type: 'text', text: item.textContent })
+    }
+    else {
+      editorContent.push({ type: 'tag', text: item.textContent })
+    }
+  }
+  return editorContent
+}
 
-function setupEvent() {
+// -------------------------------------------- Init/Remove event -------------------------------------------------
+
+function addEvents() {
   tagTextEditorRef.value?.addEventListener('focus', onFocus)
   tagTextEditorRef.value?.addEventListener('blur', onBlur)
-  tagTextEditorRef.value?.addEventListener('paste', onPaste)
+  // tagTextEditorRef.value?.addEventListener('paste', onPaste)
   tagTextEditorRef.value?.addEventListener('click', onClick)
   props.type === 'select' && tagTextEditorRef.value?.addEventListener('keydown', preventInput)
 }
 
-function removeAllEvent() {
+function removeEvents() {
   tagTextEditorRef.value?.removeEventListener('focus', onFocus)
   tagTextEditorRef.value?.removeEventListener('blur', onBlur)
-  tagTextEditorRef.value?.removeEventListener('paste', onPaste)
+  // tagTextEditorRef.value?.removeEventListener('paste', onPaste)
   tagTextEditorRef.value?.removeEventListener('click', onClick)
   props.type === 'select' && tagTextEditorRef.value?.removeEventListener('keydown', preventInput)
 }
 
 onMounted(() => {
-  setupEvent()
+  addEvents()
   setupContents()
 })
 
 onUnmounted(() => {
-  removeAllEvent()
+  removeEvents()
 })
 
 defineExpose({
+  addEvents,
+  setupContents,
   insertTag,
-  removeAllEvent,
+  removeEvents,
   getSign: () => props.uid,
 })
 </script>
@@ -95,7 +153,6 @@ defineExpose({
       :class="{ 'tag-text-editor--deactive': props.disabled }"
     />
   </div>
-  <!-- <div class="select-option" /> -->
 </template>
 
 <style>

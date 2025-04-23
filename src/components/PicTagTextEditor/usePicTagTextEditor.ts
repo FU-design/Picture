@@ -1,23 +1,13 @@
 import type { ContentItem, CreateType } from './type'
 import { type Ref, shallowRef } from 'vue'
-import { useCompatForBrowserMismatch } from './useCompatForBrowserMismatch'
 
 export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefined>) {
   const range = shallowRef<Range>()
-  const observer = shallowRef<MutationObserver | null>()
   const allowedKeys = shallowRef(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Home', 'End', 'PageUp', 'PageDown'])
   const contentTypeMap = shallowRef<Record<CreateType, (contentItem: ContentItem) => Node>>({
     tag: (contentItem: ContentItem) => createTag(contentItem),
     text: (contentItem: ContentItem) => createText(contentItem),
   })
-  const observerSettings = shallowRef({
-    attributes: true,
-    childList: true,
-    subtree: true,
-    characterData: true, // 修改字符是否发生改变(默认false)
-  })
-
-  const { checkNavigatorUserAgent, insertInputPlaceholder } = useCompatForBrowserMismatch(tagTextEditorRef)
 
   function createText(contentItem?: ContentItem): Node {
     return document.createTextNode(contentItem ? contentItem.text ?? '' : '')
@@ -51,58 +41,27 @@ export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefine
     resetSelectionCollapse(range.value)
   }
 
-  function clearUnableDomForTagTextEditor() {
-    if (tagTextEditorRef.value?.lastChild?.nodeName === 'BR') {
-      tagTextEditorRef.value.innerHTML = ''
-    }
-  }
-
-  function setupObserver() {
-    if (!observer.value) {
-      observer.value = new MutationObserver(handleObserver)
-    }
-    observer.value?.observe(tagTextEditorRef.value!, observerSettings.value)
-  }
-
-  function handleObserver(mutations: MutationRecord[], _observer: MutationObserver) {
-    mutations.forEach((mutation) => {
-      if (mutation.type === 'childList') {
-        // 兼容 FireFox
-        if (checkNavigatorUserAgent('firefox')) {
-          insertInputPlaceholder()
-        }
-        clearUnableDomForTagTextEditor() // 彻底清空输入框无用内容 ( 让模拟表单元素中的placeholder能够正常显示 )
-        console.warn('removedNodes :>> ', mutation.removedNodes)
-        console.warn('addedNodes :>> ', mutation.addedNodes)
-        console.warn('object :>> ', mutation)
-      }
-      if (mutation.type === 'attributes') {
-        console.warn('attributes :>> ', mutation)
-      }
-      if (mutation.type === 'characterData') {
-        console.warn('characterData :>> ', mutation)
-      }
-    })
-  }
-
+  // 重新定义焦点位置
   function resetSelectionCollapse(range: Range) {
     const selection = window.getSelection()
-    selection?.removeAllRanges() // 重新定义焦点位置
+    selection?.removeAllRanges()
     selection?.addRange(range)
     tagTextEditorRef.value?.focus()
   }
 
   function checkAncestorContainer() {
+    let isChildForContainer = false
     const tempRange = window.getSelection()?.getRangeAt(0)
-    const isChildForContainer = tempRange?.commonAncestorContainer && tagTextEditorRef.value?.contains(tempRange.commonAncestorContainer)
-    isChildForContainer && (range.value = getSelection()?.getRangeAt(0))
+    if (tempRange) {
+      isChildForContainer = tagTextEditorRef.value?.contains(tempRange.commonAncestorContainer) ?? false
+      isChildForContainer && (range.value = getSelection()?.getRangeAt(0))
+    }
     return isChildForContainer
   }
 
   return {
     range,
     allowedKeys,
-    setupObserver,
     createText,
     createTag,
     insertTag,

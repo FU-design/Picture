@@ -62,6 +62,11 @@ function onfocus(editorKey: string) {
   }
 }
 
+function onchange(commad: string, val: ContentItem) {
+  console.warn('editor commad :>> ', commad)
+  console.warn('editor change :>> ', val)
+}
+
 function handleRef(el: unknown, index: number) {
   el != null && (picTagTextEditorRefs.value[index] = el as PicTagTextEditorType)
 }
@@ -101,6 +106,7 @@ function resetCurrPicTagTextEditorRef(editorKey: string) {
           v-model:contents="item.testContents"
           :uid="`${item.id}`"
           @focus="() => onfocus(`${item.id}`)"
+          @change="onchange"
         />
       </PicCard>
       <PicButton :border="true" shape="circle" @click="removeEditor(index, `${item.id}`)">
