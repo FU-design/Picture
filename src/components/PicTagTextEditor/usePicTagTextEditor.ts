@@ -1,7 +1,8 @@
 import type { ContentItem, CreateType } from './type'
-import { type Ref, shallowRef } from 'vue'
+import { ref, shallowRef } from 'vue'
 
-export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefined>) {
+export function usePicTagTextEditor() {
+  const tagTextEditorRef = ref<HTMLElement>()
   const range = shallowRef<Range>()
   const allowedKeys = shallowRef(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Home', 'End', 'PageUp', 'PageDown'])
   const contentTypeMap = shallowRef<Record<CreateType, (contentItem: ContentItem) => Node>>({
@@ -9,11 +10,11 @@ export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefine
     text: (contentItem: ContentItem) => createText(contentItem),
   })
 
-  function createText(contentItem?: ContentItem): Node {
+  function createText(contentItem?: ContentItem) {
     return document.createTextNode(contentItem ? contentItem.text ?? '' : '')
   }
 
-  function createContent(contentItem: ContentItem): Node {
+  function createContent(contentItem: ContentItem) {
     return contentTypeMap.value[contentItem.type](contentItem)
   }
 
@@ -31,8 +32,11 @@ export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefine
     if (!range.value) {
       return
     }
-    const { startContainer: start, endContainer: end } = range.value
-    if (start.parentElement?.tagName === 'I' || end.parentElement?.tagName === 'I') {
+    const el = range.value.commonAncestorContainer as Element
+    if (el?.closest && el?.closest('tag')) {
+      return
+    }
+    if (!el?.closest && el.parentElement?.closest('.tag')) {
       return
     }
     const tag = createContent(item)
@@ -41,7 +45,7 @@ export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefine
     resetSelectionCollapse(range.value)
   }
 
-  // 重新定义焦点位置
+  // 重置光标位置
   function resetSelectionCollapse(range: Range) {
     const selection = window.getSelection()
     selection?.removeAllRanges()
@@ -49,24 +53,24 @@ export function usePicTagTextEditor(tagTextEditorRef: Ref<HTMLElement | undefine
     tagTextEditorRef.value?.focus()
   }
 
-  function checkAncestorContainer() {
-    let isChildForContainer = false
+  // 在当前编辑器失去焦点的时候，缓存最后一次操作光标时的范围信息
+  function checkAncestorContainerAndCacheRange() {
     const tempRange = window.getSelection()?.getRangeAt(0)
     if (tempRange) {
-      isChildForContainer = tagTextEditorRef.value?.contains(tempRange.commonAncestorContainer) ?? false
+      const isChildForContainer = tagTextEditorRef.value?.contains(tempRange.commonAncestorContainer) ?? false
       isChildForContainer && (range.value = getSelection()?.getRangeAt(0))
     }
-    return isChildForContainer
   }
 
   return {
     range,
     allowedKeys,
+    tagTextEditorRef,
     createText,
     createTag,
     insertTag,
     createContent,
     resetSelectionCollapse,
-    checkAncestorContainer,
+    checkAncestorContainerAndCacheRange,
   }
 }

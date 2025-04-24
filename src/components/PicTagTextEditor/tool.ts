@@ -13,9 +13,9 @@ export function insertInputPlaceholder(container: HTMLElement) {
   }
 }
 
-export function controlCursorToBypassDefaultInput(range: Range) {
+export function controlCursorToBypassDefaultInput() {
   const selection = window.getSelection()
-  range = selection?.getRangeAt(0) || document.createRange()
+  let range = selection?.getRangeAt(0) || document.createRange()
   const parentElement = range?.endContainer.parentElement
   if (parentElement && [...parentElement.classList || []].includes('tag')) {
     parentElement?.after(createPlaceholder())
@@ -25,11 +25,16 @@ export function controlCursorToBypassDefaultInput(range: Range) {
     range.collapse()
     selection?.addRange(range)
   }
+  return range
 }
 
 // 彻底清空输入框无用内容 ( 让模拟表单元素中的placeholder能够正常显示 )
 export function clearUnableDomForTagTextEditor(container: HTMLElement) {
-  container.lastChild?.nodeName === 'BR' && (container.innerHTML = '')
+  const { firstChild, lastChild } = container
+  const childCount = container.childNodes.length
+  const isClear = lastChild?.nodeName === 'BR' && (firstChild?.nodeType === Node.TEXT_NODE && firstChild.textContent === '')
+  if (isClear && childCount <= 2)
+    container.innerHTML = ''
 }
 
 function createPlaceholder() {

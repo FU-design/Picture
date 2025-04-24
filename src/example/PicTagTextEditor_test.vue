@@ -13,11 +13,7 @@ const data = reactive<{ id: number, testContents: ContentItem[] }[]>([
     testContents: [
       {
         type: 'tag',
-        text: 'welcome world !',
-      },
-      {
-        type: 'tag',
-        text: 'hello',
+        text: 'welcome world!',
       },
       {
         type: 'text',
@@ -25,7 +21,7 @@ const data = reactive<{ id: number, testContents: ContentItem[] }[]>([
       },
       {
         type: 'tag',
-        text: 'who are you !',
+        text: 'I’am fine, thank you!',
       },
     ],
   },

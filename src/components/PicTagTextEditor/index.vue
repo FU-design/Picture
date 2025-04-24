@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ContentItem, TagTextEditorEmits, TagTextEditorProps } from './type'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { checkNavigatorUserAgent, clearUnableDomForTagTextEditor, controlCursorToBypassDefaultInput, insertInputPlaceholder } from './tool'
 import { useMutationObserver } from './useMutationObserver'
 import { usePicTagTextEditor } from './usePicTagTextEditor'
@@ -8,13 +8,12 @@ import { usePicTagTextEditor } from './usePicTagTextEditor'
 const props = withDefaults(defineProps<TagTextEditorProps>(), {
   type: 'textarea',
   disabled: false,
-  placeholder: 'Please input ....',
+  placeholder: 'Please input xxx',
   contents: (): ContentItem[] => { return [] },
 })
 const emits = defineEmits<TagTextEditorEmits>()
-const tagTextEditorRef = ref<HTMLElement>()
 
-const { allowedKeys, range, createText, createContent, insertTag, checkAncestorContainer } = usePicTagTextEditor(tagTextEditorRef)
+const { allowedKeys, range, tagTextEditorRef, createText, createContent, insertTag, checkAncestorContainerAndCacheRange } = usePicTagTextEditor()
 const { setupObserver } = useMutationObserver(tagTextEditorRef, {
   childList: handleChildListChange,
   characterData: handleCharacterDataChange,
@@ -28,13 +27,15 @@ function onFocus(e: Event) {
 }
 
 function onBlur(e: Event) {
-  checkAncestorContainer() && emits('blur', e)
+  checkAncestorContainerAndCacheRange()
+  emits('blur', e)
 }
 
-function onClick(e: Event) {
+function onClick() {
   // 确保点击不可编辑元素时调整光标（兼容FireFox）
-  checkNavigatorUserAgent('firefox') && controlCursorToBypassDefaultInput(range.value!)
-  emits('clickTag', e)
+  if (checkNavigatorUserAgent('firefox')) {
+    range.value = controlCursorToBypassDefaultInput()
+  }
 }
 
 function preventInput(e: KeyboardEvent) {
@@ -148,10 +149,11 @@ defineExpose({
     <div
       ref="tagTextEditorRef"
       class="tag-text-editor"
-      :data-placeholder="placeholder"
-      :contenteditable="true && !props.disabled"
-      :class="{ 'tag-text-editor--deactive': props.disabled }"
+      :data-placeholder="$props.placeholder"
+      :contenteditable="true && !$props.disabled"
+      :class="{ 'tag-text-editor--deactive': $props.disabled }"
     />
+    <slot name="suffix" />
   </div>
 </template>
 
@@ -192,6 +194,9 @@ defineExpose({
 
 .tag-text-editor:focus {
   outline: none;
+}
+
+.tag-text-editor-wrp:focus-within {
   box-shadow: 0 0 0 1px var(--input-border-focus);
   background-color: var(--input-bg-focus);
 }
@@ -210,14 +215,17 @@ defineExpose({
   box-sizing: border-box;
   border-color: transparent;
   line-height: normal;
-
- /* 核心：启用边框断裂效果 */
- box-decoration-break: slice;
- -webkit-box-decoration-break: slice;
 }
 
-.tag-text-editor-wrp{
+.tag-text-editor-wrp {
   position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--input-bg);
+  border-radius: 4px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .select-option{
@@ -232,15 +240,9 @@ defineExpose({
   min-width: 0;
   width: 100%;
   height: 100%;
-  border-radius: 4px;
   padding: 6px;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 4px;
   overflow: auto;
-  background-color: var(--input-bg);
   color: var(--input-text);
-  transition: border-color 0.15s, box-shadow 0.15s;
   line-height: 1.5;
 
   /* key of resolve content wrap */
