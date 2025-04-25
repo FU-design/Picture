@@ -1,30 +1,30 @@
-class PromisePool {
-  private queue: (() => Promise<void>)[] = []
-  private maxConcurrent: number
-  private running: number = 0
+// class PromisePool {
+//   private queue: (() => Promise<void>)[] = []
+//   private maxConcurrent: number
+//   private running: number = 0
 
-  constructor(maxConcurrent: number) {
-    this.maxConcurrent = maxConcurrent
-  }
+//   constructor(maxConcurrent: number) {
+//     this.maxConcurrent = maxConcurrent
+//   }
 
-  addTask(task: () => Promise<void>) {
-    this.queue.push(task)
-    this.schedule()
-  }
+//   addTask(task: () => Promise<void>) {
+//     this.queue.push(task)
+//     this.schedule()
+//   }
 
-  private schedule(): void {
-    while ((this.running < this.maxConcurrent) && this.queue.length > 0) {
-      const task = this.queue.shift()
-      if (task) {
-        this.running++
-        task().finally(() => {
-          this.running--
-          this.schedule()
-        })
-      }
-    }
-  }
-}
+//   private schedule(): void {
+//     while ((this.running < this.maxConcurrent) && this.queue.length > 0) {
+//       const task = this.queue.shift()
+//       if (task) {
+//         this.running++
+//         task().finally(() => {
+//           this.running--
+//           this.schedule()
+//         })
+//       }
+//     }
+//   }
+// }
 
 // 转化为方法
 async function asyncPool<T, R>(
