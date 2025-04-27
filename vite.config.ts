@@ -15,20 +15,20 @@ export default defineConfig(({ command, mode }) => {
         '@': path.resolve(__dirname, './src'),
       },
     },
-    // server: {
-    //   host: '0.0.0.0',
-    //   port: 86,
-    //   hmr: true,
-    //   // open: true,
-    //   proxy: {
-    //     '/api': {
-    //       target: 'http://127.0.0.1:86',
-    //       changeOrigin: true,
-    //       ws: true,
-    //       rewrite: path => path.replace(/^\/api/, ''),
-    //     },
-    //   },
-    // },
+    server: {
+      host: '0.0.0.0',
+      port: 86, // 项目启动时的自定义端口
+      hmr: true, // 开启热更新,更改代码后自动更新页面
+      open: true, // 项目启动时，自动在浏览器中打开应用程序（也可以在package.json中的 “script” 选项中配置）
+      proxy: {
+        '/api': {
+          target: 'http://127.0.0.1:86',
+          changeOrigin: true,
+          ws: true,
+          rewrite: path => path.replace(/^\/api/, ''),
+        },
+      },
+    },
     css: {
     },
   }
