@@ -39,6 +39,7 @@
 }
 
 .markdown-body table{
+  max-width:100%;
   color: $title-color;
 }
 
@@ -61,4 +62,10 @@
 
 .markdown-body ul li {
   margin-bottom: 20px;
+}
+
+.markdown-body .img-box{
+ max-width: 100%;
+ width: 60%;
+ border: 4px solid rgba(0,0,0,.2);
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { copyText } from '@/utils/tools'
 import hljs from 'highlight.js'
-import { Marked } from 'marked'
+import { Marked, type Tokens } from 'marked'
 import { markedHighlight } from 'marked-highlight'
 import { computed, nextTick, toRefs } from 'vue'
 
@@ -16,6 +16,23 @@ const props = withDefaults(defineProps<Props>(), {
 const { markRaw } = toRefs(props)
 const markdownContent = computed(() => parseMDByHighlight(markRaw.value))
 
+const renderer = {
+  image(token: Tokens.Image): string {
+    return `<div class='img-box'>
+              <img src="${getNodeImageUrl(token.href)}" />
+            </div>
+           `
+  },
+}
+
+function viewImg() {
+  console.warn('预览图片')
+}
+
+function getNodeImageUrl(name?: string) {
+  return `https://raw.githubusercontent.com/FU-design/Picture/refs/heads/main/src/assets/notes-img/${name}`
+}
+
 function copyCode(code: string) {
   copyText(code)
     .then(() => {
@@ -29,7 +46,14 @@ function copyCode(code: string) {
 async function upgradeCodeBlock(el: HTMLElement) {
   await nextTick()
   const pres = el.querySelectorAll('pre')
-  pres.forEach((pre) => {
+  const imgs = document.querySelectorAll('img')
+
+  for (const imgItem of imgs) {
+    imgItem.removeEventListener('click', viewImg)
+    imgItem.addEventListener('click', viewImg)
+  }
+
+  for (const pre of pres) {
     const code = pre.querySelector('code')
     const langTag = pre.querySelector('#language')
     const copyTag = pre.querySelector('#copy')
@@ -37,7 +61,7 @@ async function upgradeCodeBlock(el: HTMLElement) {
     langTag!.textContent = (code?.classList.value.replace('hljs language-', '') as string).toLowerCase()
     copyTag && copyTag.removeEventListener('click', () => copyCode(code?.textContent || ''))
     copyTag?.addEventListener('click', () => copyCode(code?.textContent || ''))
-  })
+  }
 }
 
 function upgradedCodeBlock(parsedMarked: string) {
@@ -57,6 +81,7 @@ function getMarkedHighlightOps() {
 
 function parseMDByHighlight(content: string) {
   const marked = new Marked(getMarkedHighlightOps())
+  marked.use({ renderer })
   return upgradedCodeBlock(marked.parse(content) as string)
 }
 
