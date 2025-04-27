@@ -1,5 +1,5 @@
 import Layout from '@/layout/index.vue'
-import { createRouter, createWebHashHistory, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 
 const routes = [
   {
