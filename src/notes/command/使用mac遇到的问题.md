@@ -46,3 +46,6 @@ source  ~/.profile
 ```bash
 nvm --version
 ```
+
+引用内容来自：
+- [zsh: command not found: nvm 问题（Mac）](https://blog.csdn.net/qq_50386946/article/details/143053977?spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-143053977-blog-137523394.235%5Ev43%5Epc_blog_bottom_relevance_base2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-143053977-blog-137523394.235%5Ev43%5Epc_blog_bottom_relevance_base2&utm_relevant_index=9)
