@@ -33,7 +33,7 @@ export function usePicTagTextEditor() {
       return
     }
     const el = range.value.commonAncestorContainer as Element
-    if (el?.closest && el?.closest('tag')) {
+    if (el?.closest && el?.closest('.tag')) {
       return
     }
     if (!el?.closest && el.parentElement?.closest('.tag')) {

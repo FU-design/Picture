@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { copyText } from '@/utils/tools'
 import hljs from 'highlight.js'
 import { Marked, type Tokens } from 'marked'
@@ -18,8 +18,9 @@ const markdownContent = computed(() => parseMDByHighlight(markRaw.value))
 
 const renderer = {
   image(token: Tokens.Image): string {
+    console.warn(token)
     return `<div class='img-box'>
-              <img src="${getNodeImageUrl(token.href)}" />
+              <img src="${getNodeImageUrl(token.href)}" alt=""/>
             </div>
            `
   },
@@ -30,6 +31,9 @@ function viewImg() {
 }
 
 function getNodeImageUrl(name?: string) {
+  if (name?.split('.').at(-1) === 'gif') {
+    return name
+  }
   return `https://raw.githubusercontent.com/FU-design/Picture/refs/heads/main/src/assets/notes-img/${name}`
 }
 
@@ -92,7 +96,7 @@ const vUpgradeCodeBlock = {
 </script>
 
 <template>
-  <div v-upgradeCodeBlock v-dompurify-html="markdownContent" class="markdown-body" />
+  <div v-dompurify-html="markdownContent" v-upgradeCodeBlock class="markdown-body" />
 </template>
 
 <style lang="scss" scoped></style>
