@@ -1,6 +1,7 @@
 import path from 'node:path'
 import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vite'
+import { visualizer } from 'rollup-plugin-visualizer'
+import { defineConfig, type PluginOption } from 'vite'
 // import updateTimestampPlugin from './src/plugins/plugin-update-times'
 
 // https://vite.dev/config/
@@ -9,10 +10,23 @@ export default defineConfig(({ command, mode }) => {
   console.log('mode :>> ', mode)
   return {
     base: '/Picture/', // (当使用 github pages部署的时候，需要配置该 base: '/<仓库>/')
-    plugins: [vue()],
+    plugins: [visualizer() as PluginOption, vue()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
+      },
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            console.info(id)
+            if (id.includes('node_modules')) {
+              return 'vendor'
+            }
+          },
+        },
+
       },
     },
     server: {
