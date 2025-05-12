@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "commit": "git add . & git-cz",
     "prepare": "husky",
+    "test": "vitest",
     "md": "node scripts/createPage.js",
     "watch": "node scripts/watchFileChanged.js"
   },
@@ -41,6 +42,7 @@
     "github-markdown-css": "^5.8.1",
     "glob": "^11.0.1",
     "globals": "^15.14.0",
+    "happy-dom": "^17.4.7",
     "husky": "^9.1.7",
     "inquirer": "^12.3.2",
     "postcss": "^8.5.1",
@@ -50,6 +52,7 @@
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.20.0",
     "vite": "^6.0.5",
+    "vitest": "^3.1.3",
     "vue-tsc": "^2.2.0"
   },
   "config": {
