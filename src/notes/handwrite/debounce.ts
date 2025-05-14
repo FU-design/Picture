@@ -1,3 +1,7 @@
+/**
+ * 防抖 多次同一个操作，只在最后一次执行一次该操作。
+ */
+
 // 简单版本
 export function debounce(func: any, delay: number) {
   let timer: NodeJS.Timeout
