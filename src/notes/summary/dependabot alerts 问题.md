@@ -18,7 +18,7 @@
   pnpm install
   ```
 
-####  向 npm 安全数据库查询你项目中使用的依赖是否存在安全漏洞。它分析你的 `pnpm-lock.yaml` 中锁定的包及其版本。
+####  向 npm 安全数据库查询你项目中使用的依赖是否存在安全漏洞。它分析你的 `pnpm-lock.yaml` 中锁定的包及其版本。（其中的 pnpm 的版本要和本地的 `pnpm-lock.yaml` 中的版本保持一致）
 
   ```bash
   pnpm audit --audit-level=moderate
