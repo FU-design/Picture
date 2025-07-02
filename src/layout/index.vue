@@ -4,7 +4,7 @@ import LayoutMain from '@/layout/main/index.vue'
 </script>
 
 <template>
-  <div>
+  <div class="layout">
     <LayoutHeader />
     <LayoutMain>
       <RouterView :key="$route.fullPath" />
@@ -13,4 +13,7 @@ import LayoutMain from '@/layout/main/index.vue'
 </template>
 
 <style scoped>
+.layout{
+  position: relative;
+}
 </style>

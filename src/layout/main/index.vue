@@ -10,9 +10,9 @@
 <style scoped>
 main{
   width: 100vw;
-  height: calc(100vh - 60px);
+  height: 100vh;
   overflow: auto;
-  background-color: rgba(0,0,0,0.04);
+  background-color: hsl(0 0% 99.0%);
   background-image: url('@/assets/grid.svg');
 }
 </style>

@@ -1,32 +1,40 @@
 <script setup lang="ts">
-import BlogLogo from '@/components/hoc/blogLogo'
 import PicButton from '@/components/PicButton/index.vue'
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { type RouteRecordRaw, useRouter } from 'vue-router'
 
 const router = useRouter()
 const routes = computed(() => router.getRoutes().filter(v => v.meta.menu))
+
+function goPage(route: RouteRecordRaw) {
+  router.push({ path: (route.redirect || route.path) as string })
+}
 </script>
 
 <template>
   <header>
-    <BlogLogo />
-    <nav>
-      <div v-for="(route, index) in routes" :key="index" @click="() => $router.push({ path: (route.redirect || route.path) as string })">
+    <ul>
+      <li v-for="(route, index) in routes" :key="index" @click="goPage(route)">
         <PicButton> {{ route.meta.name }}</PicButton>
-      </div>
-    </nav>
+      </li>
+    </ul>
   </header>
 </template>
 
 <style lang="scss"  scoped>
 header{
-  height: 60px;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   padding-inline: 24px;
+
   display: flex;
   justify-content: center;
-  background-color: #f7f6f8;
-  nav{
+  border-radius: 9999px;
+  background-color: #fff;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  ul{
     flex: 1;
     display: flex;
     justify-content: center;
@@ -34,5 +42,9 @@ header{
     gap: 8px;
     line-height: 60px;
   }
+}
+
+.menu__active{
+
 }
 </style>
