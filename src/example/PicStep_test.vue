@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { StepItem } from '@/components/PicStep/type'
 import PicCard from '@/components/PicCard/index.vue'
 import PicStep from '@/components/PicStep/index.vue'
@@ -31,12 +31,11 @@ const steps = shallowRef<StepItem[]>([
 </template>
 
 <style scoped>
-.test{
+.test {
   box-sizing: border-box;
   padding: 16px;
   height: 100%;
   flex-direction: column;
   overflow: auto;
-  box-sizing: border-box;
 }
 </style>
