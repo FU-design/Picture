@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { ContentItem, TagTextEditorEmits, TagTextEditorProps } from './type'
 import { onMounted, onUnmounted } from 'vue'
 import { checkNavigatorUserAgent, clearUnableDomForTagTextEditor, controlCursorToBypassDefaultInput, insertInputPlaceholder } from './tool'
@@ -148,10 +148,10 @@ defineExpose({
   <div class="tag-text-editor-wrp">
     <div
       ref="tagTextEditorRef"
-      class="tag-text-editor"
+      :class="{ 'tag-text-editor--de-active': $props.disabled }"
+      :contenteditable="!$props.disabled"
       :data-placeholder="$props.placeholder"
-      :contenteditable="true && !$props.disabled"
-      :class="{ 'tag-text-editor--deactive': $props.disabled }"
+      class="tag-text-editor"
     />
     <slot name="suffix" />
   </div>
@@ -171,7 +171,7 @@ defineExpose({
   --tag-border: #000;
 }
 
-.tag-text-editor--deactive {
+.tag-text-editor--de-active {
   background-color: var(--input-bg-disabled);
   cursor: not-allowed;
   opacity: 0.7;

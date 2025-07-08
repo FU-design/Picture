@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import PicStep_test from '@/example/PicStep_test.vue'
 import PicTagTextEditor_test from '@/example/PicTagTextEditor_test.vue'
 
@@ -10,9 +10,7 @@ const components = [
 
 <template>
   <div class="components">
-    <template v-for="(comp, i) in components" :key="i">
-      <component :is="comp" />
-    </template>
+    <component :is="comp" v-for="(comp, index) in components" :key="index" />
   </div>
 </template>
 
