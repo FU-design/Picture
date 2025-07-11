@@ -3,14 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
- position: relative;
- background-color: theme(backgroundColor.white);
- color: theme(textColor.black);
+  position: relative;
+  background-color: white;
+  color: black;
 }
 
-.bg-gh-marketingDark{
-  background-color:rgba(5,13,33,1)
+.bg-gh-marketingDark {
+  background-color: rgba(5, 13, 33, 1);
 }
-

@@ -2,7 +2,11 @@
 
 <template>
   <div id="app">
-    <RouterView />
+    <a-config-provider>
+      <a-app>
+        <RouterView />
+      </a-app>
+    </a-config-provider>
   </div>
 </template>
 
