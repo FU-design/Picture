@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { type IFormItem, VForm } from '@/components/antd/VForm/index'
+import { type FormItem, VForm } from '@/components/antd/VForm/index'
+// interface FormData {
+//   name?: string
+//   generatedAt?: string
+//   totalUsers?: number
+//   colors?: string[]
+//   cities?: string[]
+//   status?: string
+// }
 
 const formData = ref<any>({})
 
-const formRules = computed(() => ({
-  name: [{ required: true, message: `Name is required`, trigger: ['blur', 'change'] }],
-  generatedAt: [{ required: true, message: `Generated At is required`, trigger: ['blur', 'change'] }],
-}))
-
-const formItems = ref<IFormItem[]>([
+const formItems = ref<FormItem[]>([
   {
     field: 'name',
     label: 'Name',
@@ -21,13 +24,10 @@ const formItems = ref<IFormItem[]>([
     required: true,
   },
   {
-    field: 'totalUsers',
-    label: 'Total Users',
-  },
-  {
     type: 'select',
     field: 'colors',
     label: 'Colors',
+    placeholder: 'Please select colors',
     props: {
       options: [
         { label: '选项 1', value: '1' },
@@ -64,9 +64,16 @@ const formItems = ref<IFormItem[]>([
 <template>
   <div class="v-form-test">
     <PicCard>
-      <VForm v-model="formData" :form-items="formItems" :form-data="formData" :rules="formRules" :gutter="[16, 8]">
-        <template #name="{ item }">
-          <a-input v-model:value="formData[item.field]" :placeholder="item.placeholder" />
+      <VForm v-model="formData" :form-items="formItems" :form-data="formData" :gutter="[16, 8]">
+        <template #name="{ item, record }">
+          <a-input v-model:value="record[item.field]" :placeholder="item.placeholder" />
+        </template>
+        <template #colors="{ item, record }">
+          <a-select v-model:value="record[item.field]" :placeholder="item.placeholder">
+            <a-select-option v-for="option in [2, 1] " :key="option" :value="option">
+              {{ option }}
+            </a-select-option>
+          </a-select>
         </template>
       </VForm>
       <div>
@@ -74,7 +81,7 @@ const formItems = ref<IFormItem[]>([
       </div>
     </PicCard>
   </div>
-</template>
+</template>ƒ
 
 <style scoped>
 .v-form-test{

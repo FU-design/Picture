@@ -5,6 +5,7 @@ import {
   DatePicker,
   Input,
   InputNumber,
+  InputPassword,
   Radio,
   RadioGroup,
   Select,
@@ -15,20 +16,20 @@ import {
   TreeSelect,
 } from 'ant-design-vue'
 import { isString } from 'lodash-es'
-import { type Component, h } from 'vue'
+import { type Component, defineComponent, h } from 'vue'
 
 /**
- * 由于 ant-design-vue 组件许多都是 v-model:value 绑定的，为了统一处理，使用这个函数将组件转换为支持 v-model 的组件。
- * 将传入的组件转换为支持 v-model 双向绑定的组件。
- * @param component 要转换为支持 v-model 的 Vue 组件
- * @param key 绑定属性的名称，默认为 'value'
- * @returns 返回一个新的包装组件，支持 v-model 绑定
+ * Transforms a component's `v-model:value` binding into the standard `v-model` binding.
+ *
+ * @param component - The component to transform.
+ * @param key - The key to use for the model value, defaults to 'value'.
+ * @returns A new component that supports `v-model` shorthand.
  */
 export function transformModelValue(component: Component, key = 'value'): Component {
   return defineComponent({
     setup(props: any, { attrs, slots, emit }) {
       return () => {
-        const { modelValue, ..._props } = { ...props, ...attrs }
+        const { modelValue = undefined, ..._props } = { ...props, ...attrs }
         return h(
           component,
           {
@@ -47,8 +48,14 @@ const formItemMap = new Map<string, Component>([
   ['input', transformModelValue(Input)],
   ['textarea', transformModelValue(Textarea)],
   ['number', transformModelValue(InputNumber)],
+  ['password', transformModelValue(InputPassword)],
   ['time', transformModelValue(TimePicker)],
-  ['date', transformModelValue((props, { slots, attrs }) => h(DatePicker, { valueFormat: 'YYYY-MM-DD', ...attrs, ...props }, slots))],
+  [
+    'date',
+    transformModelValue((props, { slots, attrs }) =>
+      h(DatePicker, { valueFormat: 'YYYY-MM-DD', ...attrs, ...props }, slots),
+    ),
+  ],
   ['cascader', Cascader],
   ['slider', Slider],
   ['checkbox', transformModelValue(Checkbox, 'checked')],
@@ -65,3 +72,6 @@ export function getFormItemComponent(type?: string | Component): Component {
     return type
   return (type && formItemMap.get(type)) || formItemMap.get('input') || Input
 }
+
+export const baseFieldReg = /^(?:type|label|props|on|span|key|hidden|required|rules|col|formProps)$/
+export const selectType = new Set(['select', 'date', 'time', 'treeSelect'])
