@@ -1,5 +1,7 @@
 # Dependabot alerts（即远程仓库关于，依赖包的版本风险监测）
 
+## 风险查找
+
 #### 查看依赖树
 
   ```bash
@@ -39,3 +41,46 @@
 
 - 在 CI/CD 中确保构建不会上线存在 中等及以上漏洞 的代码
 - 在开发中有选择性地处理问题，避免被低危漏洞干扰
+
+## 风险处理
+
+1. 一般情况下会让其升级到某个版本即可
+
+2. 存在内部依赖的包，即在 `package.json` 中的依赖项中不存在的，可通过以下配置覆盖指定依赖包的版本。
+
+    ```bash
+    dependencies:
+      axios 1.8.2
+        └── form-data 4.0.3
+    ```
+
+   ```json
+   // package.json
+   {
+     "dependencies": {
+       // ...
+       "axios": "^1.8.2"
+     },
+     "devDependencies": {
+       // ...
+     },
+     "pnpm": {
+       "overrides": {
+         "axios>form-data": "4.0.4"
+       }
+     }
+   }
+   ```
+
+    > 这个是 pnpm 独有的嵌套 overrides 语法：只对 axios 内部的 form-data 生效。
+
+    `npm 8.x`
+
+    只支持全局统一覆盖，不能指定 axios 单独用什么版本
+      ```json
+     {
+        "overrides": {
+          "form-data": "4.0.4"
+        }
+     }
+      ```
