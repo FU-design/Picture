@@ -24,6 +24,7 @@ export default defineConfig(({ command, mode }) => {
         resolvers: [
           AntDesignVueResolver({
             importStyle: false, // v4.x 不在使用 import 'ant-design-vue/es/form/style/css'
+            resolveIcons: true,
           }),
         ],
         dts: 'src/types/components.d.ts',
