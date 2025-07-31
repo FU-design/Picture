@@ -17,17 +17,13 @@ const routes = [
       },
       {
         path: 'notes',
+        name: 'Notes',
         redirect: '/notes/all',
         children: [
           {
             path: 'all',
             name: 'NoteList',
             component: () => import('@/view/notes.vue'),
-          },
-          {
-            path: ':tag/:title',
-            name: 'NoteDetail',
-            component: () => import('@/components/hoc/noteDetail'),
           },
         ],
         meta: {

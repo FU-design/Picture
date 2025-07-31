@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import PicButton from '@/components/PicButton/index.vue'
-import PicView from '@/components/PicView/index.vue'
 import { type NoteType, useNotes } from '@/composables/useNotes'
 import { onMounted } from 'vue'
 
@@ -16,20 +14,26 @@ onMounted(() => {
 </script>
 
 <template>
-  <PicView>
-    <div class="note-wrap">
-      <PicButton v-for="(note, idx) in notes" :key="idx" @click.prevent="openNote(note)">
-        <span>
-          {{ note.title }}
-        </span>
-      </PicButton>
-    </div>
-  </PicView>
+  <div class="note-wrap">
+    <template v-for="[tag, items] of notes" :key="tag">
+      <PicCard>
+        <h2>{{ tag.toUpperCase() }}</h2>
+        <section class="note-sub__title">
+          <PicButton v-for="item in items" :key="item.tag" @click="openNote(item)">
+            {{ item.title }}
+          </PicButton>
+        </section>
+      </PicCard>
+    </template>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .note-wrap{
   display: grid;
-  gap: 16px;
+}
+
+.note-sub__title{
+  display: grid;
 }
 </style>

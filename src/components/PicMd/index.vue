@@ -18,7 +18,6 @@ const markdownContent = computed(() => parseMDByHighlight(markRaw.value))
 
 const renderer = {
   image(token: Tokens.Image): string {
-    console.warn(token)
     return `<div class='img-box'>
               <img src="${getNodeImageUrl(token.href)}" alt=""/>
             </div>
