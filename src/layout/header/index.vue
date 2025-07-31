@@ -29,6 +29,8 @@ header{
   transform: translateX(-50%);
   padding-inline: 24px;
 
+  z-index: 99999;
+
   display: flex;
   justify-content: center;
   border-radius: 9999px;
