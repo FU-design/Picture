@@ -1,3 +1,13 @@
+---
+Created At: 8/1/2025, 4:22:20 PM
+Updated At: 8/1/2025, 4:22:20 PM
+File Name: 在vue组件单测中使用vue-i18n
+---
+
+# 在vue组件单测中使用vue-i18n
+
+This is the content of 在vue组件单测中使用vue-i18n.
+
 ## 在vue组件单测中使用vue-i18n
 
 注：当前的测试工具为 [vitest](https://cn.vitest.dev/guide/)。

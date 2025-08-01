@@ -1,3 +1,13 @@
+---
+Created At: 8/1/2025, 4:22:41 PM
+Updated At: 8/1/2025, 4:22:41 PM
+File Name: ci error
+---
+
+# ci error
+
+This is the content of ci error.
+
 # Vite - Adding auto-imports.d.ts to gitignore, generates error building for production
 
 from

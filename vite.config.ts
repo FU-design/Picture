@@ -5,6 +5,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig, type PluginOption } from 'vite'
+import MarkdownFrontmatter from './src/plugins/markdown-frontmatter'
 
 // https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -15,6 +16,7 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       visualizer() as PluginOption,
       vue(),
+      MarkdownFrontmatter({ matchPath: 'src/notes/**/*.md' }),
       AutoImport({
         imports: ['vue', 'pinia', 'vue-router'],
         resolvers: [AntDesignVueResolver()],
@@ -52,7 +54,7 @@ export default defineConfig(({ command, mode }) => {
       host: '0.0.0.0',
       port: 86, // 项目启动时的自定义端口
       hmr: true, // 开启热更新,更改代码后自动更新页面
-      open: true, // 项目启动时，自动在浏览器中打开应用程序（也可以在package.json中的 “script” 选项中配置）
+      // open: true, // 项目启动时，自动在浏览器中打开应用程序（也可以在package.json中的 “script” 选项中配置）
       proxy: {
         '/api': {
           target: 'http://127.0.0.1:86',

@@ -10,18 +10,20 @@
     "commit": "git add . & git-cz",
     "prepare": "husky",
     "test": "vitest",
-    "md": "node scripts/createPage.js",
-    "watch": "node scripts/watchFileChanged.js"
+    "generate-meta": "node scripts/generate-note-times.js"
   },
   "dependencies": {
+    "@types/micromatch": "^4.0.9",
     "@vueuse/core": "^13.4.0",
     "ant-design-vue": "~4.2.6",
     "clipboard": "^2.0.11",
     "dompurify": "^3.2.5",
+    "fast-glob": "^3.3.3",
     "highlight.js": "^11.11.1",
     "lodash-es": "^4.17.21",
     "marked": "^15.0.6",
     "marked-highlight": "^2.2.1",
+    "micromatch": "^4.0.8",
     "pinia": "^2.3.0",
     "vue": "^3.5.13",
     "vue-dompurify-html": "^5.2.0",

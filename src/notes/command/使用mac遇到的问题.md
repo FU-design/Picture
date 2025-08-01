@@ -1,3 +1,13 @@
+---
+Created At: 8/1/2025, 4:22:50 PM
+Updated At: 8/1/2025, 4:22:50 PM
+File Name: 使用mac遇到的问题
+---
+
+# 使用mac遇到的问题
+
+This is the content of 使用mac遇到的问题.
+
 # zsh: command not found: nvm 问题（Mac）
 
 ### 打开终端输入

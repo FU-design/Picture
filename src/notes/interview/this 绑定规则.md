@@ -1,3 +1,13 @@
+---
+Created At: 8/1/2025, 4:22:36 PM
+Updated At: 8/1/2025, 4:22:36 PM
+File Name: this 绑定规则
+---
+
+# this 绑定规则
+
+This is the content of this 绑定规则.
+
 # this 四大绑定规则（和优先级）
 
 ### 1. 默认绑定（最低优先级）

@@ -1,16 +1,12 @@
 ---
-
-## 📦 框架 / 应用框架
-
-| 名称          | 文档链接                                     | 描述                            |
-| ----------- | ---------------------------------------- | ----------------------------- |
-| **React**   | [https://react.dev](https://react.dev)   | 声明式 UI 库，构建 SPA 和组件化开发的标准     |
-| **Vue 3**   | [https://vuejs.org](https://vuejs.org)   | 渐进式框架，组合式 API 适用于灵活组件开发       |
-| **Angular** | [https://angular.io](https://angular.io) | 一体化大型前端框架，支持 DI、模块、路由等        |
-| **Next.js** | [https://nextjs.org](https://nextjs.org) | React 全栈框架，支持 SSR、API 路由、静态生成 |
-| **Nuxt 3**  | [https://nuxt.com](https://nuxt.com)     | Vue 的同类全栈框架，支持 SSR、目录约定       |
-
+Created At: 8/1/2025, 4:22:31 PM
+Updated At: 8/1/2025, 4:22:31 PM
+File Name: link
 ---
+
+# link
+
+This is the content of link.
 
 ## 🛠️ 构建工具 / 打包器 / 包管理
 

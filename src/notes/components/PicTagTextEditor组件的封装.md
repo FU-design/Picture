@@ -1,3 +1,13 @@
+---
+Created At: 8/1/2025, 4:22:48 PM
+Updated At: 8/1/2025, 4:22:48 PM
+File Name: PicTagTextEditor组件的封装
+---
+
+# PicTagTextEditor组件的封装
+
+This is the content of PicTagTextEditor组件的封装.
+
 # [PicTagTextEditor 组件封装 (vue3 版本)](https://github.com/FU-design/Picture/tree/main/src/components/PicTagTextEditor)
 
 #### 功能点
