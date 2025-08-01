@@ -4,7 +4,7 @@ import process from 'node:process'
 import fg from 'fast-glob'
 
 // 目标输出文件
-const META_JSON_PATH = path.resolve(process.cwd(), 'src', 'logs', 'note-times', 'meta.json')
+const META_JSON_PATH = path.resolve(process.cwd(), 'src', 'records', 'note-times.json')
 
 async function ensureDir(dirPath) {
   await fs.mkdir(dirPath, { recursive: true })

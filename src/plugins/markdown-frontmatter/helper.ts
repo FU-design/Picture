@@ -5,6 +5,7 @@ import micromatch from 'micromatch'
 export function getFileNameAndRelativePath(filePath: string) {
   const relative = path.relative(process.cwd(), filePath)
   const fileName = path.basename(relative, '.md')
+  // const dirName = path.basename(path.dirname(filePath)) // tag
 
   return {
     relative,
