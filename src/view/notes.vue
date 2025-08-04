@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { type NoteType, useNotes } from '@/composables/useNotes'
+import { type NoteData, useNotes } from '@/composables/useNotes'
 import { onMounted } from 'vue'
 
 const { notes, setupNotes, updateRouterOfNote } = useNotes()
 
 const notePosStates = ref<Map<string, { w: number, h: number }>>(new Map())
 
-async function openNote(note: NoteType) {
+async function openNote(note: NoteData) {
   updateRouterOfNote(note)
 }
 
@@ -39,8 +39,8 @@ onMounted(async () => {
         <PicCard>
           <h2>{{ tag.toUpperCase() }}</h2>
           <section class="note-sub__title">
-            <PicButton v-for="item in items" :key="item.tag" @click="openNote(item)">
-              {{ item.title }}
+            <PicButton v-for="item in items" :key="item.Tag" @click="openNote(item)">
+              {{ item['File Name'] }}
             </PicButton>
           </section>
         </PicCard>

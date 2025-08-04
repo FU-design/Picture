@@ -2,9 +2,10 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import fg from 'fast-glob'
+import matter from 'gray-matter'
 
 // 目标输出文件
-const META_JSON_PATH = path.resolve(process.cwd(), 'src', 'records', 'note-times.json')
+const META_JSON_PATH = path.resolve(process.cwd(), 'src', 'records', 'note-meta.json')
 
 async function ensureDir(dirPath) {
   await fs.mkdir(dirPath, { recursive: true })
@@ -37,19 +38,15 @@ async function generateMetaMap() {
     const content = await fs.readFile(filePath, 'utf-8')
     const fm = await parseFrontmatter(content)
     const fileName = path.basename(filePath, '.md')
+    const tag = path.basename(path.dirname(filePath))
 
     // 如果 File Name 缺失，用文件名补充
     const finalFileName = fm.fileName || fileName
 
-    // 如果没有 Created At 或 Updated At，设为空字符串或默认时间
-    metaMap.set(finalFileName, {
-      createdAt: fm.createdAt || '',
-      updatedAt: fm.updatedAt || '',
-      fileName: finalFileName,
-    })
+    const parsed = matter(content)
+    metaMap.set(finalFileName, { ...parsed, data: (Object.assign(parsed.data, { Path: filePath, Tag: tag })) })
   }
 
-  // 写入 meta.json
   await ensureDir(path.dirname(META_JSON_PATH))
   const obj = Object.fromEntries(metaMap)
   await fs.writeFile(META_JSON_PATH, JSON.stringify(obj, null, 2), 'utf-8')

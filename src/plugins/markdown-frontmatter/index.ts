@@ -1,5 +1,7 @@
 import type { Plugin } from 'vite'
+import { execFile } from 'node:child_process'
 import { readFile, writeFile } from 'node:fs/promises'
+import path from 'node:path'
 import { generateFrontmatter, getFileNameAndRelativePath, isTargetMarkdown, updateOrInsertFrontmatter } from './helper'
 
 interface PluginPayload {
@@ -17,6 +19,7 @@ export default function updateMarkdownFrontmatterPlugin(pluginPayload: PluginPay
       server.watcher.on('add', filePath => onAdd(filePath, pluginPayload))
       server.watcher.on('change', filePath => onChange(filePath, pluginPayload))
     },
+
   }
 }
 
@@ -29,6 +32,7 @@ function onAdd(filePath: string, payload: PluginPayload) {
     const mdContext = generateFrontmatter(fileName)
 
     writeFile(filePath, mdContext)
+    updateNoteMeta()
   }
 }
 
@@ -41,6 +45,20 @@ async function onChange(filePath: string, payload: PluginPayload) {
 
     if (content === updated)
       return
+
     await writeFile(filePath, updated, 'utf-8')
+    updateNoteMeta()
   }
+}
+
+function updateNoteMeta() {
+  const scriptPath = path.resolve('scripts/generate-note-meta.js')
+  execFile('node', [scriptPath], (error, _stdout, stderr) => {
+    if (error) {
+      console.error('[note-meta] 脚本执行失败:', error)
+      return
+    }
+    if (stderr)
+      console.error('[note-meta] 脚本错误输出:', stderr)
+  })
 }

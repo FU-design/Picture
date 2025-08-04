@@ -1,47 +1,34 @@
 import NoteDetail from '@/components/hoc/noteDetail'
-import { computed, ref } from 'vue'
+import noteMeta from '@/records/note-meta.json'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-export interface NoteType { title: string, tag: string, md?: () => Promise<{ default: string }> }
+export interface NoteData { 'Path': string, 'Tag': string, 'File Name': string, 'Created At': string, 'Updated At': string }
 
-// get all notes data
+export type NoteInfo = Record<string, { content: string, data: NoteData }>
+
 export function useNotes() {
   const router = useRouter()
-  const notes = ref<Map<string, NoteType[]>>(new Map())
-  const notesModules = computed(() => import.meta.glob('../notes/**/*.md', { query: '?raw' }))
-  const notePaths = computed(() => Object.keys(notesModules.value))
-
-  const generateNoteConfig = (path: string): NoteType => {
-    const parts = path.split('/')
-    const fileName = parts.pop()!.replace('.md', '')
-    const dirName = parts[parts.length - 1]
-
-    return {
-      title: fileName,
-      tag: dirName,
-    }
-  }
+  const notes = ref<Map<string, NoteData[]>>(new Map())
+  const noteMetaJson = computed((): NoteInfo => noteMeta)
 
   const setupNotes = async () => {
-    for (const path of notePaths.value) {
-      const { tag, title } = generateNoteConfig(path)
+    for (const [title, val] of Object.entries((noteMetaJson.value))) {
+      const { Tag: tag } = (val.data)
 
-      const { default: mdRaw } = await (notesModules.value[path] as () => Promise<{ default: string }>)()
+      notes.value.has(tag) ? notes.value.get(tag)?.push(val.data) : (notes.value.set(tag, [val.data]))
 
-      notes.value.has(tag) ? (notes.value.get(tag)?.push({ tag, title })) : (notes.value.set(tag, [{ tag, title }]))
-
-      // update md content real time
       if (router.hasRoute(title)) {
         router.removeRoute(title)
       }
 
       // add dynamic Routes about notes
-      router.addRoute('Notes', { path: `/notes/${tag}/${title}`, name: title, component: h(NoteDetail, { mdRaw }) })
+      router.addRoute('Notes', { path: `/notes/${tag}/${title}`, name: title, component: h(NoteDetail, { mdRaw: val.content }) })
     }
   }
 
-  const updateRouterOfNote = async (note: NoteType) => {
-    router.push({ path: `/notes/${note.tag}/${note.title}` })
+  const updateRouterOfNote = async (note: NoteData) => {
+    router.push({ path: `/notes/${note.Tag}/${note['File Name']}` })
   }
 
   return {
