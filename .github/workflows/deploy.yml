@@ -43,6 +43,8 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
       - name: Install dependencies
         run: pnpm i
+      - name: Generate notes times
+        run: pnpm generate-meta
       - name: Build
         run: pnpm build
       - name: Setup Pages
