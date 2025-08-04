@@ -1,12 +1,8 @@
 ---
 Created At: 8/1/2025, 4:22:24 PM
-Updated At: 8/1/2025, 4:22:24 PM
+Updated At: 8/4/2025, 9:34:25 AM
 File Name: js精度问题
 ---
-
-# js精度问题
-
-This is the content of js精度问题.
 
 # toFixed 方法无法处理的精度问题（四舍五入）
 

@@ -1,12 +1,8 @@
 ---
 Created At: 8/1/2025, 4:22:51 PM
-Updated At: 8/1/2025, 4:22:51 PM
+Updated At: 8/4/2025, 9:31:50 AM
 File Name: vim常用指令
 ---
-
-# vim常用指令
-
-This is the content of vim常用指令.
 
 ### 🛠️ 使用 Vim 的基本命令
 

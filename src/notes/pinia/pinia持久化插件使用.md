@@ -1,3 +1,11 @@
+---
+Created At: 8/4/2025, 9:33:32 AM
+Updated At: 8/4/2025, 9:33:39 AM
+File Name: pinia持久化插件使用
+---
+
+# pinia持久化插件使用
+
 1. 安装 `piniaPluginPersistedstate`
 
    ```cmd

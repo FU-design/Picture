@@ -1,12 +1,8 @@
 ---
 Created At: 8/1/2025, 4:22:36 PM
-Updated At: 8/1/2025, 4:22:36 PM
+Updated At: 8/4/2025, 9:33:17 AM
 File Name: this 绑定规则
 ---
-
-# this 绑定规则
-
-This is the content of this 绑定规则.
 
 # this 四大绑定规则（和优先级）
 

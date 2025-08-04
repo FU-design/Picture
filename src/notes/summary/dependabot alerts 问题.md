@@ -1,12 +1,8 @@
 ---
 Created At: 8/1/2025, 4:22:22 PM
-Updated At: 8/1/2025, 4:22:22 PM
+Updated At: 8/4/2025, 9:34:04 AM
 File Name: dependabot alerts 问题
 ---
-
-# dependabot alerts 问题
-
-This is the content of dependabot alerts 问题.
 
 # Dependabot alerts（即远程仓库关于，依赖包的版本风险监测）
 

@@ -61,7 +61,7 @@ onMounted(async () => {
 }
 
 .note-item{
-  position: absolute;
+  // position: absolute;
 }
 
 .note-sub__title{

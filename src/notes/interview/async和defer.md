@@ -1,12 +1,10 @@
 ---
 Created At: 8/1/2025, 4:22:35 PM
-Updated At: 8/1/2025, 4:22:35 PM
+Updated At: 8/4/2025, 9:33:10 AM
 File Name: async和defer
 ---
 
 # async和defer
-
-This is the content of async和defer.
 
 在 HTML 中，`<script>` 标签的 `async` 和 `defer` 属性用于控制外部 JavaScript 文件的加载和执行方式，以优化网页的性能和用户体验。以下是这两个属性的作用、特点和区别的总结表：
 
