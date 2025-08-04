@@ -12,7 +12,7 @@ main{
   width: 100vw;
   height: 100vh;
   overflow: auto;
-  background-color: hsl(0 0% 99.0%);
-  background-image: url('@/assets/grid.svg');
+  padding-block: 24px;
+  background-color: var(--bg-body);
 }
 </style>

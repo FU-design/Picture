@@ -1,81 +1,125 @@
 <script setup lang="ts">
 import { type NoteData, useNotes } from '@/composables/useNotes'
+import noteMeta from '@/records/note-meta.json'
+import dayjs from 'dayjs'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
+import updateLocale from 'dayjs/plugin/updateLocale'
 import { onMounted } from 'vue'
 
-const { notes, setupNotes, updateRouterOfNote } = useNotes()
+dayjs.extend(advancedFormat)
+dayjs.extend(updateLocale)
 
-// const notePosStates = ref<Map<string, { w: number, h: number }>>(new Map())
+const { setupNotes, updateRouterOfNote } = useNotes()
+
+const timelines = shallowRef<Map<string, NoteData[]>>(new Map())
 
 async function openNote(note: NoteData) {
   updateRouterOfNote(note)
 }
 
-// function setNoteCardPostion() {
-//   const noteWrap = document.querySelector('.note-wrap') as HTMLElement
+function generateTimeLine() {
+  const map = new Map()
+  Object.values(noteMeta).forEach(({ data }) => {
+    const updateTime = dayjs(data['Updated At']).format('YYYY-MM-DD HH:mm:ss')
+    const timeline = dayjs(updateTime).format('YYYY-MM-DD')
 
-//   const resizeObserver = new ResizeObserver(() => {
-//     const noteItems = document.querySelectorAll('.note-item') as NodeListOf<HTMLElement>
+    if (!map.get(timeline)) {
+      map.set(timeline, [data])
+    }
 
-//     noteItems.forEach((item) => {
-//       const { width: w, height: h } = item.getBoundingClientRect()
-//       const tag = item.getAttribute('id')
-//       notePosStates.value.set(tag!, { w, h })
-//     })
-//   })
-
-//   resizeObserver.observe(noteWrap)
-// }
+    else if (dayjs(timeline).isSame(dayjs(updateTime), 'day')) {
+      map.get(timeline).push(data)
+    }
+  })
+  return map
+}
 
 onMounted(async () => {
   await setupNotes()
-  // setNoteCardPostion()
+  timelines.value = generateTimeLine()
 })
 </script>
 
 <template>
   <PicView>
-    <div class="note-wrap">
-      <template v-for="[tag, items] of notes" :key="tag">
-        <PicCard>
-          <div :id="tag" class="note-item">
-            <h1>{{ tag.toUpperCase() }}</h1>
-            <section class="note-title">
-              <template v-for="item in items" :key="item.Tag">
-                <a class="note-sub-title" @click="openNote(item)">
-                  <i> {{ item['File Name'] }}</i>
-                  <i>{{ item['Created At'] }}</i>
-                </a>
-              </template>
+    <div class="time-line">
+      <template v-for="[timeline, val] of timelines" :key="timeline">
+        <header>
+          <h1>
+            <span>
+              {{ dayjs(timeline).format('MMMM') }}
+            </span>
+            <span>
+              {{ dayjs(timeline).format('YYYY') }}
+            </span>
+          </h1>
+          <span class="line" />
+        </header>
+        <div style="padding-left: 10px;">
+          <template v-for="data of val" :key="data">
+            <section class="note-item-wrp">
+              <div class="note-item">
+                <section class="note-title" @click="openNote(data)">
+                  <span> {{ data['File Name'] }}</span>
+                  <i>{{ dayjs(data['Updated At']).format('HH:mm:ss') }}</i>
+                </section>
+              </div>
             </section>
-          </div>
-        </PicCard>
+          </template>
+        </div>
       </template>
     </div>
   </PicView>
 </template>
 
 <style lang="scss" scoped>
+.note-item-wrp{
+  padding-left: 16px;
+  border-left: 1px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-style: solid;
+}
+
+.time-line{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  h1{
+    display: flex;
+    gap: 8px;
+    :last-child{
+      color: rgba(0, 0, 0, 0.3);
+    }
+  }
+  header{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    .line{
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.1);
+      flex: 1;
+    }
+  }
+}
+
 .note-item{
   width: 100%;
-  h1{
-    margin-bottom: 8px;
+  padding: 6px;
+  color: rgba(0, 0, 0, 0.6);
+  &:hover{
+    cursor: pointer;
+    transition: all 0.5s;
+    color: var(--color-primary-500);
   }
 }
 
 .note-title{
-  display: grid;
-  gap: 8px;
-  color: #00000090;
-}
-
-.note-sub-title{
   display: flex;
   justify-content: space-between;
-}
-
-.pic-button:has(> .note-sub-title) {
- width: 100%;
- display: flex;
- justify-content: space-between;
+  cursor: inherit;
+  i{
+    color: rgba(0, 0, 0, 0.3);
+  }
 }
 </style>

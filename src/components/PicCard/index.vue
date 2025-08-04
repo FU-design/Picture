@@ -16,8 +16,7 @@
 .pic-card{
   height: fit-content;
   padding: 16px;
-  margin-block: 16px;
   border-radius: 6px;
-  background-color: #fffffff5;
+  background-color: var(--bg-surface);
 }
 </style>

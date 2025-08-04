@@ -5,10 +5,29 @@
 
 :root {
   position: relative;
-  background-color: white;
-  color: black;
+   /* === Primary Base Colors === */
+  --color-primary-100: #d2dbeb;
+  --color-primary-200: #6a90b4;
+  --color-primary-300: #3c6a90;    
+  --color-primary-400: #00385a;
+  --color-primary-500: #01162b;
+
+  /* === Gradient Colors === */
+  --gradient-primary-1: linear-gradient(to right, #01162b, #6a90b4);
+  --gradient-primary-2: linear-gradient(to right, #00385a, #d2dbeb);
+  --gradient-primary-3: linear-gradient(to right, #d2dbeb, #01162b);
+  --gradient-primary-4: linear-gradient(to right, #d2dbeb, #6a90b4);
+
+  
 }
 
+
+
+
+
+ 
+
+
 .bg-gh-marketingDark {
-  background-color: rgba(5, 13, 33, 1);
+  background-color: var(-color-primary-500);
 }
