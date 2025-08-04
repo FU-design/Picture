@@ -37,9 +37,14 @@ function getNodeImageUrl(name?: string) {
 }
 
 function copyCode(code: string) {
+  const copyBtn = document.querySelector('#copy')
   copyText(code)
     .then(() => {
       console.warn('Copied!')
+      copyBtn!.textContent = 'Copied'
+      setTimeout(() => {
+        copyBtn!.textContent = 'Copy'
+      }, 3000)
     })
     .catch((err: Error) => {
       console.warn('Failed!', err)

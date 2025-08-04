@@ -4,67 +4,78 @@ import { onMounted } from 'vue'
 
 const { notes, setupNotes, updateRouterOfNote } = useNotes()
 
-const notePosStates = ref<Map<string, { w: number, h: number }>>(new Map())
+// const notePosStates = ref<Map<string, { w: number, h: number }>>(new Map())
 
 async function openNote(note: NoteData) {
   updateRouterOfNote(note)
 }
 
-function setNoteCardPostion() {
-  const noteWrap = document.querySelector('.note-wrap') as HTMLElement
+// function setNoteCardPostion() {
+//   const noteWrap = document.querySelector('.note-wrap') as HTMLElement
 
-  const resizeObserver = new ResizeObserver(() => {
-    const noteItems = document.querySelectorAll('.note-item') as NodeListOf<HTMLElement>
+//   const resizeObserver = new ResizeObserver(() => {
+//     const noteItems = document.querySelectorAll('.note-item') as NodeListOf<HTMLElement>
 
-    noteItems.forEach((item) => {
-      const { width: w, height: h } = item.getBoundingClientRect()
-      const tag = item.getAttribute('id')
-      notePosStates.value.set(tag!, { w, h })
-    })
-  })
+//     noteItems.forEach((item) => {
+//       const { width: w, height: h } = item.getBoundingClientRect()
+//       const tag = item.getAttribute('id')
+//       notePosStates.value.set(tag!, { w, h })
+//     })
+//   })
 
-  resizeObserver.observe(noteWrap)
-}
+//   resizeObserver.observe(noteWrap)
+// }
 
 onMounted(async () => {
   await setupNotes()
-  setNoteCardPostion()
+  // setNoteCardPostion()
 })
 </script>
 
 <template>
-  <div class="note-wrap">
-    <template v-for="[tag, items] of notes" :key="tag">
-      <div :id="tag" class="note-item">
+  <PicView>
+    <div class="note-wrap">
+      <template v-for="[tag, items] of notes" :key="tag">
         <PicCard>
-          <h2>{{ tag.toUpperCase() }}</h2>
-          <section class="note-sub__title">
-            <PicButton v-for="item in items" :key="item.Tag" @click="openNote(item)">
-              {{ item['File Name'] }}
-            </PicButton>
-          </section>
+          <div :id="tag" class="note-item">
+            <h1>{{ tag.toUpperCase() }}</h1>
+            <section class="note-title">
+              <template v-for="item in items" :key="item.Tag">
+                <a class="note-sub-title" @click="openNote(item)">
+                  <i> {{ item['File Name'] }}</i>
+                  <i>{{ item['Created At'] }}</i>
+                </a>
+              </template>
+            </section>
+          </div>
         </PicCard>
-      </div>
-    </template>
-  </div>
+      </template>
+    </div>
+  </PicView>
 </template>
 
 <style lang="scss" scoped>
-.note-wrap{
-  position: relative;
-  height: 100%;
-  display: grid;
-  background-color: rgba(48, 78, 113, 0.31);
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-  padding-inline: 16px;
-}
-
 .note-item{
-  // position: absolute;
+  width: 100%;
+  h1{
+    margin-bottom: 8px;
+  }
 }
 
-.note-sub__title{
+.note-title{
   display: grid;
+  gap: 8px;
+  color: #00000090;
+}
+
+.note-sub-title{
+  display: flex;
+  justify-content: space-between;
+}
+
+.pic-button:has(> .note-sub-title) {
+ width: 100%;
+ display: flex;
+ justify-content: space-between;
 }
 </style>
