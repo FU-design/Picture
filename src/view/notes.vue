@@ -1,42 +1,22 @@
 <script setup lang="ts">
-import { type NoteData, useNotes } from '@/composables/useNotes'
-import noteMeta from '@/records/note-meta.json'
+import { type NoteData, useDynamicRoutes } from '@/stores/dynamic-routes'
 import dayjs from 'dayjs'
-import advancedFormat from 'dayjs/plugin/advancedFormat'
-import updateLocale from 'dayjs/plugin/updateLocale'
 import { onMounted } from 'vue'
 
-dayjs.extend(advancedFormat)
-dayjs.extend(updateLocale)
-
-const { setupNotes, updateRouterOfNote } = useNotes()
-
+const router = useRouter()
 const timelines = shallowRef<Map<string, NoteData[]>>(new Map())
+const dynamicRoutesStore = useDynamicRoutes()
 
-async function openNote(note: NoteData) {
+function updateRouterOfNote(note: NoteData) {
+  router.push({ path: `/notes/${note.Tag}/${note['File Name']}` })
+}
+
+function openNote(note: NoteData) {
   updateRouterOfNote(note)
 }
 
-function generateTimeLine() {
-  const map = new Map()
-  Object.values(noteMeta).forEach(({ data }) => {
-    const updateTime = dayjs(data['Updated At']).format('YYYY-MM-DD HH:mm:ss')
-    const timeline = dayjs(updateTime).format('YYYY-MM-DD')
-
-    if (!map.get(timeline)) {
-      map.set(timeline, [data])
-    }
-
-    else if (dayjs(timeline).isSame(dayjs(updateTime), 'day')) {
-      map.get(timeline).push(data)
-    }
-  })
-  return map
-}
-
-onMounted(async () => {
-  await setupNotes()
-  timelines.value = generateTimeLine()
+onMounted(() => {
+  timelines.value = dynamicRoutesStore.getTimeLine()
 })
 </script>
 
