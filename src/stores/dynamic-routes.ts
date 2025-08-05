@@ -20,16 +20,20 @@ export const useDynamicRoutes = defineStore('dynamic-routes', () => {
     const map = new Map()
     Object.values(noteMetaJson.value).forEach(({ data }) => {
       const updateTime = dayjs(data['Updated At']).format('YYYY-MM-DD HH:mm:ss')
-      const timeline = dayjs(updateTime).format('YYYY-MM-DD')
+      const timeline = dayjs(updateTime).format('YYYY-MM')
 
       if (!map.get(timeline)) {
         map.set(timeline, [data])
       }
-
-      else if (dayjs(timeline).isSame(dayjs(updateTime), 'day')) {
+      else {
         map.get(timeline).push(data)
+        // sort by time
+        map.set(timeline, map.get(timeline).sort((a: NoteData, b: NoteData) => {
+          return dayjs(b['Updated At']).valueOf() - dayjs(a['Updated At']).valueOf()
+        }))
       }
     })
+
     return map
   }
 
@@ -41,12 +45,13 @@ export const useDynamicRoutes = defineStore('dynamic-routes', () => {
     noteMap.value[val.Tag] ? noteMap.value[val.Tag]?.push(val) : noteMap.value[val.Tag] = [val]
   }
 
-  const createNoteDetailComponent = (mdRaw: string) =>
-    defineComponent({
+  const createNoteDetailComponent = (mdRaw: string) => {
+    return defineComponent({
       render() {
         return h(NoteDetail, { mdRaw })
       },
     })
+  }
 
   const setupNotes = async (router: Router) => {
     for (const [title, val] of Object.entries((noteMetaJson.value))) {

@@ -26,9 +26,9 @@ onMounted(() => {
       <template v-for="[timeline, val] of timelines" :key="timeline">
         <header>
           <h1>
-            <span>
+            <i>
               {{ dayjs(timeline).format('MMMM') }}
-            </span>
+            </i>
             <span>
               {{ dayjs(timeline).format('YYYY') }}
             </span>
@@ -41,7 +41,7 @@ onMounted(() => {
               <div class="note-item">
                 <section class="note-title" @click="openNote(data)">
                   <span> {{ data['File Name'] }}</span>
-                  <i>{{ dayjs(data['Updated At']).format('HH:mm:ss') }}</i>
+                  <i>{{ dayjs(data['Updated At']).format('DD-HH:mm') }}</i>
                 </section>
               </div>
             </section>
