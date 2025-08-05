@@ -2,7 +2,7 @@
 @import 'highlight.js/styles/github-dark.css';
 
 .code-block-head {
-  background: #00000017;
+  background: #000000;
   display: flex;
   color: #999;
   justify-content: space-between;

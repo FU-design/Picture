@@ -73,7 +73,7 @@ async function upgradeCodeBlock(el: HTMLElement) {
 }
 
 function upgradedCodeBlock(parsedMarked: string) {
-  const upgradeParts = `<pre style="padding:0"><div class="code-block-head"><label id="language">Code</label><button id="copy">Copy</button></div>`
+  const upgradeParts = `<pre style="padding:0; font-size: 0.7rem"><div class="code-block-head"><label id="language">Code</label><button id="copy">Copy</button></div>`
   return parsedMarked.replace(/<pre>/g, upgradeParts)
 }
 

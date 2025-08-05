@@ -11,18 +11,14 @@
 <style scoped>
 .pic-view {
   margin: 0 auto;
-  padding: 2rem 1rem;
   width: 100%;
   max-width: 72ch;
-  /* background-color: #fff; */
-  /* box-shadow: rgba(50, 50, 93, 0.25) 0 2px 5px -1px, rgba(0, 0, 0, 0.3) 0 1px 3px -1px; */
 }
 
 /* 手机端：窄屏留白 */
 @media (max-width: 640px) {
   .pic-view {
     max-width: 95%;
-    padding: 1rem;
   }
 }
 

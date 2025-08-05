@@ -32,6 +32,9 @@ export default defineConfig(({ command, mode }) => {
         dts: 'src/types/components.d.ts',
       }),
     ],
+    css: {
+      postcss: './postcss.config.js',
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
@@ -63,8 +66,6 @@ export default defineConfig(({ command, mode }) => {
           rewrite: path => path.replace(/^\/api/, ''),
         },
       },
-    },
-    css: {
     },
   }
 })
