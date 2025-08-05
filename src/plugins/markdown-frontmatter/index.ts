@@ -11,9 +11,9 @@ interface PluginPayload {
 export default function updateMarkdownFrontmatterPlugin(pluginPayload: PluginPayload): Plugin {
   return {
     name: 'markdown-frontmatter',
-    // apply(_config, env) {
-    //   return env.command === 'serve'
-    // },
+    apply(_config, env) {
+      return env.command === 'serve'
+    },
 
     configureServer(server) {
       server.watcher.on('add', filePath => onAdd(filePath, pluginPayload))
