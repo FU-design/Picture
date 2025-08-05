@@ -1,5 +1,12 @@
 import Layout from '@/layout/index.vue'
-import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
+
+const commonRoutes = [
+  {
+    path: '/not-found/:pathMatch(.*)*', // 通配符匹配所有路径
+    name: 'NotFound',
+    component: () => import('@/router/NotFound.vue'),
+  },
+]
 
 const routes = [
   {
@@ -29,7 +36,7 @@ const routes = [
           {
             path: '/notes/:tag/:filename',
             name: 'NoteFallback',
-            component: () => import('./NoteLoadingFallback.vue'),
+            component: () => import('@/router/NoteLoading.vue'),
           },
         ],
         meta: {
@@ -63,17 +70,7 @@ const routes = [
     ],
 
   },
-  {
-    path: '/:pathMatch(.*)*', // 通配符匹配所有路径
-    name: 'NotFound',
-    component: () => import('./NotFound.vue'),
-  },
-] as RouteRecordRaw[]
+  ...commonRoutes,
+]
 
-const router = createRouter({
-  // history: createWebHistory(),
-  history: createWebHashHistory(),
-  routes,
-})
-
-export default router
+export default routes
