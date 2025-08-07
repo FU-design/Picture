@@ -40,10 +40,6 @@ function onAdd(filePath: string, payload: PluginPayload) {
 function onUnlink(filePath: string, payload: PluginPayload) {
   // filter ***.md
   if (isTargetMarkdown(filePath, payload.matchPath)) {
-    const { fileName } = getFileNameAndRelativePath(filePath)
-    const mdContext = generateFrontmatter(fileName)
-
-    writeFile(filePath, mdContext)
     updateNoteMeta()
   }
 }

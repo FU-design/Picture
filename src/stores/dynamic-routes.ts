@@ -1,6 +1,6 @@
 import type { Router } from 'vue-router'
 import NoteDetail from '@/components/hoc/noteDetail'
-import noteMeta from '@/records/note-meta.json'
+import { notesData } from '@/utils/note-map'
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import updateLocale from 'dayjs/plugin/updateLocale'
@@ -14,11 +14,11 @@ export type NoteInfo = Record<string, { content: string, data: NoteData }>
 export const useDynamicRoutes = defineStore('dynamic-routes', () => {
   const hasLoadedDynamicRoutes = ref(false)
   const noteMap = ref<Record<string, NoteData[]>>({})
-  const noteMetaJson = shallowRef(noteMeta)
+  const noteMeta = shallowRef(notesData)
 
   const getTimeLine = () => {
     const map = new Map()
-    Object.values(noteMetaJson.value).forEach(({ data }) => {
+    Object.values(noteMeta.value).forEach(({ data }) => {
       const updateTime = dayjs(data['Updated At']).format('YYYY-MM-DD HH:mm:ss')
       const timeline = dayjs(updateTime).format('YYYY-MM')
 
@@ -54,7 +54,7 @@ export const useDynamicRoutes = defineStore('dynamic-routes', () => {
   }
 
   const setupNotes = async (router: Router) => {
-    for (const [title, val] of Object.entries((noteMetaJson.value))) {
+    for (const [title, val] of Object.entries((noteMeta.value))) {
       setNoteMap(val.data)
 
       if (router.hasRoute(title)) {

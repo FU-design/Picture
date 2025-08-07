@@ -10,7 +10,7 @@
     "commit": "git add . & git-cz",
     "prepare": "husky",
     "test": "vitest",
-    "note-map": "tsx scripts/note-map.ts"
+    "note-map": "tsx scripts/generate-note-map.ts"
   },
   "dependencies": {
     "@types/micromatch": "^4.0.9",
