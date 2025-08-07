@@ -5,7 +5,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig, type PluginOption } from 'vite'
-import MarkdownFrontmatter from './src/plugins/markdown-frontmatter'
+import MarkdownFrontmatter from './plugins/markdown-frontmatter'
 
 // https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {

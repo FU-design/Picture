@@ -1,7 +1,7 @@
 import type { Plugin } from 'vite'
-import { execFile } from 'node:child_process'
 import { readFile, writeFile } from 'node:fs/promises'
-import path from 'node:path'
+import process from 'node:process'
+import { generateMetaMap } from './generate'
 import { generateFrontmatter, getFileNameAndRelativePath, isTargetMarkdown, updateOrInsertFrontmatter } from './helper'
 
 interface PluginPayload {
@@ -52,13 +52,18 @@ async function onChange(filePath: string, payload: PluginPayload) {
 }
 
 function updateNoteMeta() {
-  const scriptPath = path.resolve('scripts/generate-note-meta.js')
-  execFile('node', [scriptPath], (error, _stdout, stderr) => {
-    if (error) {
-      console.error('[note-meta] 脚本执行失败:', error)
-      return
-    }
-    if (stderr)
-      console.error('[note-meta] 脚本错误输出:', stderr)
+  generateMetaMap().catch((err) => {
+    console.error(err)
+    process.exit(1)
   })
+
+  // const scriptPath = path.resolve('scripts/node-map.js')
+  // execFile('tsx', [scriptPath], (error, _stdout, stderr) => {
+  //   if (error) {
+  //     console.error('[note-meta] 脚本执行失败:', error)
+  //     return
+  //   }
+  //   if (stderr)
+  //     console.error('[note-meta] 脚本错误输出:', stderr)
+  // })
 }

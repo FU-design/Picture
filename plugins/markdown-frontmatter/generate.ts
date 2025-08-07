@@ -5,13 +5,13 @@ import fg from 'fast-glob'
 import matter from 'gray-matter'
 
 // 目标输出文件
-const META_JSON_PATH = path.resolve(process.cwd(), 'src', 'records', 'note-meta.json')
+const META_JSON_PATH = path.resolve(process.cwd(), 'src', 'utils', 'note-map.ts')
 
-async function ensureDir(dirPath) {
+async function ensureDir(dirPath: string) {
   await fs.mkdir(dirPath, { recursive: true })
 }
 
-async function parseFrontmatter(content) {
+async function parseFrontmatter(content: string) {
   const frontmatterRegex = /^---\n([\s\S]*?)\n---/
   const match = content.match(frontmatterRegex)
   if (!match)
@@ -29,7 +29,7 @@ async function parseFrontmatter(content) {
   }
 }
 
-async function generateMetaMap() {
+export async function generateMetaMap() {
   const entries = await fg('src/notes/**/*.md')
 
   const metaMap = new Map()
@@ -42,18 +42,21 @@ async function generateMetaMap() {
 
     // 如果 File Name 缺失，用文件名补充
     const finalFileName = fm.fileName || fileName
-
     const parsed = matter(content)
     metaMap.set(finalFileName, { ...parsed, data: (Object.assign(parsed.data, { Path: filePath, Tag: tag })) })
   }
 
   await ensureDir(path.dirname(META_JSON_PATH))
   const obj = Object.fromEntries(metaMap)
-  await fs.writeFile(META_JSON_PATH, JSON.stringify(obj, null, 2), 'utf-8')
-  console.log(`Generated meta.json with ${metaMap.size} entries at ${META_JSON_PATH}`)
-}
 
-generateMetaMap().catch((err) => {
-  console.error(err)
-  process.exit(1)
-})
+  const content = `// Auto-generated, DO NOT EDIT MANUALLY
+
+export const notesData = ${JSON.stringify(obj, null, 2)} as const
+\n
+export type NoteKey = keyof typeof notesData
+\n
+export type Note = typeof notesData[NoteKey]
+`
+
+  await fs.writeFile(META_JSON_PATH, content, 'utf-8')
+}

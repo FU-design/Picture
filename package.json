@@ -10,7 +10,7 @@
     "commit": "git add . & git-cz",
     "prepare": "husky",
     "test": "vitest",
-    "md": "node scripts/generate-note-meta.js"
+    "note-map": "tsx scripts/note-map.ts"
   },
   "dependencies": {
     "@types/micromatch": "^4.0.9",
@@ -59,6 +59,7 @@
     "sass": "^1.83.4",
     "tailwindcss": "^3.4.17",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.20.0",
     "unplugin-auto-import": "^19.3.0",
