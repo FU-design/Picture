@@ -41,7 +41,7 @@ onMounted(() => {
               <div class="note-item">
                 <section class="note-title" @click="openNote(data)">
                   <span> {{ data['File Name'] }}</span>
-                  <i>{{ dayjs(data['Updated At']).format('DD-HH:mm') }}</i>
+                  <i>{{ dayjs(data['Updated At']).format('MM-DD') }}</i>
                 </section>
               </div>
             </section>
