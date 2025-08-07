@@ -18,6 +18,7 @@ export default function updateMarkdownFrontmatterPlugin(pluginPayload: PluginPay
     configureServer(server) {
       server.watcher.on('add', filePath => onAdd(filePath, pluginPayload))
       server.watcher.on('change', filePath => onChange(filePath, pluginPayload))
+      server.watcher.on('unlink', filePath => onUnlink(filePath, pluginPayload))
     },
 
   }
@@ -26,6 +27,17 @@ export default function updateMarkdownFrontmatterPlugin(pluginPayload: PluginPay
 // --------------- watcher actions -----------------
 
 function onAdd(filePath: string, payload: PluginPayload) {
+  // filter ***.md
+  if (isTargetMarkdown(filePath, payload.matchPath)) {
+    const { fileName } = getFileNameAndRelativePath(filePath)
+    const mdContext = generateFrontmatter(fileName)
+
+    writeFile(filePath, mdContext)
+    updateNoteMeta()
+  }
+}
+
+function onUnlink(filePath: string, payload: PluginPayload) {
   // filter ***.md
   if (isTargetMarkdown(filePath, payload.matchPath)) {
     const { fileName } = getFileNameAndRelativePath(filePath)
