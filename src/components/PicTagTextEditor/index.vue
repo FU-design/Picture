@@ -226,6 +226,7 @@ defineExpose({
   transition: border-color 0.15s, box-shadow 0.15s;
   border-width: 1px;
   border-style: solid;
+  height: 32px;
 }
 
 .select-option{

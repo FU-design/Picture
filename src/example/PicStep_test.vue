@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { StepItem } from '@/components/PicStep/type'
-import PicCard from '@/components/PicCard/index.vue'
 import PicStep from '@/components/PicStep/index.vue'
 import { shallowRef } from 'vue'
 
@@ -25,17 +24,11 @@ const steps = shallowRef<StepItem[]>([
 </script>
 
 <template>
-  <PicCard class="test">
+  <div class="test">
     <PicStep :steps="steps" />
-  </PicCard>
+  </div>
 </template>
 
 <style scoped>
-.test {
-  box-sizing: border-box;
-  padding: 16px;
-  height: 100%;
-  flex-direction: column;
-  overflow: auto;
-}
+
 </style>

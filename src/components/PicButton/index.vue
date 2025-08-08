@@ -1,15 +1,15 @@
 <script setup lang="ts">
 interface PicBtnProps {
-  border?: boolean
+  disabled?: boolean
 }
 withDefaults(defineProps<PicBtnProps>(), {
-  border: false,
+  disabled: false,
 })
 </script>
 
 <template>
   <div class="pic-button">
-    <button :class="{ 'is-border': $props.border }">
+    <button :disabled="$props.disabled">
       <slot />
     </button>
   </div>
@@ -21,17 +21,48 @@ withDefaults(defineProps<PicBtnProps>(), {
   button{
     padding-inline: 8px;
     border-radius: 4px;
-    color: #00000090;
+    border: 1px solid transparent;
+    background-color: transparent;
+    color: #000;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s, box-shadow 0.15s;
     &:hover{
-      color: #000;
+      border-color: #00000050;
+      color: #00000080;
     }
   }
 }
 
-.is-border{
-  border: 1px solid #00000090;
-  &:hover{
-    border-color: #000;
-  }
+.pic-button button:disabled{
+  color: #00000030;
+  cursor: not-allowed;
+}
+.pic-button button:disabled:hover{
+  border-color: #00000030;
+  color: #00000030;
+}
+.pic-button button:disabled:focus-visible{
+  outline: none;
+  box-shadow: none;
+}
+.pic-button button:focus-visible{
+  outline: 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
+.pic-button button:focus{
+  outline: 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
+.pic-button button:focus-visible{
+  outline: 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: 0 0 0 2px rgba(0, 0 , 0.2);
 }
 </style>

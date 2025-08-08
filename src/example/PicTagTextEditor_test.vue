@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import type { ContentItem } from '@/components/PicTagTextEditor/type'
-import PicButton from '@/components/PicButton/index.vue'
-import PicCard from '@/components/PicCard/index.vue'
 import PicTagTextEditor from '@/components/PicTagTextEditor/index.vue'
 import { reactive, ref } from 'vue'
 
@@ -88,39 +86,35 @@ function resetCurrPicTagTextEditorRef(editorKey: string) {
 </script>
 
 <template>
-  <PicCard class="test">
-    <div>
+  <div class="test">
+    <div class="insert-wrp">
       <input placeholder="请输入插入到编辑器的内容" @input="onInput">
       <PicButton :border="true" @click="onInsert">
         insert
       </PicButton>
-      <PicButton :border="true" shape="circle" @click="addEditor">
+      <PicButton :border="true" shape="circle" :disabled="data.length >= 3 " @click="addEditor">
         <span> + </span>
       </PicButton>
     </div>
-    <template v-for="(item, index) in data" :key="index">
-      <PicCard style="width: 300px;">
-        <template #header>
-          <div style="margin-bottom: 8px;">
-            {{ `Editor ${index}` }}
-          </div>
-        </template>
-        <div class="data-item">
-          <PicTagTextEditor
-            :key="item.id"
-            :ref="(el) => handleRef(el, index)"
-            v-model:contents="item.testContents"
-            :uid="`${item.id}`"
-            @focus="onfocus(`${item.id}`)"
-            @change="onchange"
-          />
-          <PicButton :border="true" shape="circle" @click="removeEditor(index, `${item.id}`)">
-            <span>-</span>
-          </PicButton>
-        </div>
-      </PicCard>
-    </template>
-  </PicCard>
+    <section v-for="(item, index) in data" :key="index">
+      <div style="margin-bottom: 8px;">
+        {{ `Editor ${index}` }}
+      </div>
+      <div class="data-item">
+        <PicTagTextEditor
+          :key="item.id"
+          :ref="(el) => handleRef(el, index)"
+          v-model:contents="item.testContents"
+          :uid="`${item.id}`"
+          @focus="onfocus(`${item.id}`)"
+          @change="onchange"
+        />
+        <PicButton :border="true" shape="circle" @click="removeEditor(index, `${item.id}`)">
+          <span>-</span>
+        </PicButton>
+      </div>
+    </section>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -128,9 +122,9 @@ function resetCurrPicTagTextEditorRef(editorKey: string) {
   box-sizing: border-box;
   padding: 16px;
   display: flex;
-  height:100%;
   gap: 10px;
   flex-direction: column;
+  min-height: 280px;
   overflow: auto;
   input{
     &:focus-visible{
@@ -142,7 +136,20 @@ function resetCurrPicTagTextEditorRef(editorKey: string) {
     display: grid;
     align-items: center;
     gap: 8px;
-    grid-template-columns: 80% 20%;
+    grid-template-columns: 1fr auto;
+  }
+  .insert-wrp{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    input{
+      flex: 1;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--input-border);
+      background-color: var(--input-bg);
+      color: var(--input-text);
+    }
   }
 }
 </style>

@@ -63,23 +63,21 @@ const formItems = ref<FormItem[]>([
 
 <template>
   <div class="v-form-test">
-    <PicCard>
-      <VForm v-model="formData" :form-items="formItems" :form-data="formData" :gutter="[16, 8]">
-        <template #name="{ item, record }">
-          <a-input v-model:value="record[item.field]" :placeholder="item.placeholder" />
-        </template>
-        <template #colors="{ item, record }">
-          <a-select v-model:value="record[item.field]" :placeholder="item.placeholder">
-            <a-select-option v-for="option in [2, 1] " :key="option" :value="option">
-              {{ option }}
-            </a-select-option>
-          </a-select>
-        </template>
-      </VForm>
-      <div>
-        {{ formData }}
-      </div>
-    </PicCard>
+    <VForm v-model="formData" :form-items="formItems" :form-data="formData" :gutter="[16, 8]">
+      <template #name="{ item, record }">
+        <a-input v-model:value="record[item.field]" :placeholder="item.placeholder" />
+      </template>
+      <template #colors="{ item, record }">
+        <a-select v-model:value="record[item.field]" :placeholder="item.placeholder">
+          <a-select-option v-for="option in [2, 1] " :key="option" :value="option">
+            {{ option }}
+          </a-select-option>
+        </a-select>
+      </template>
+    </VForm>
+    <div>
+      {{ formData }}
+    </div>
   </div>
 </template>ƒ
 
