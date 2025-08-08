@@ -12,7 +12,7 @@
 .pic-view {
   margin: 0 auto;
   width: 100%;
-  max-width: 72ch;
+  padding-block: 24px;
 }
 
 /* 手机端：窄屏留白 */

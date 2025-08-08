@@ -88,7 +88,9 @@ function resetCurrPicTagTextEditorRef(editorKey: string) {
 <template>
   <div class="test">
     <div class="insert-wrp">
-      <input placeholder="请输入插入到编辑器的内容" @input="onInput">
+      <div class="pic-input">
+        <input placeholder="请输入插入到编辑器的内容" @input="onInput">
+      </div>
       <PicButton :border="true" @click="onInsert">
         insert
       </PicButton>
@@ -119,37 +121,39 @@ function resetCurrPicTagTextEditorRef(editorKey: string) {
 
 <style lang="scss" scoped>
 .test{
-  box-sizing: border-box;
-  padding: 16px;
   display: flex;
-  gap: 10px;
   flex-direction: column;
   min-height: 280px;
-  overflow: auto;
+  gap: 10px;
   input{
     &:focus-visible{
       outline:0;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
   }
-  .data-item{
+}
+
+.data-item{
     display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
     gap: 8px;
-    grid-template-columns: 1fr auto;
   }
-  .insert-wrp{
+
+.insert-wrp{
     display: flex;
     align-items: center;
     gap: 8px;
-    input{
-      flex: 1;
-      padding: 4px 8px;
-      border-radius: 4px;
-      border: 1px solid var(--input-border);
-      background-color: var(--input-bg);
-      color: var(--input-text);
-    }
+  }
+
+.pic-input{
+  width: 100%;
+  input{
+    width: 100%;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
   }
 }
 </style>

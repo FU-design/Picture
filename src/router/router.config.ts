@@ -40,7 +40,7 @@ const routes = [
           },
         ],
         meta: {
-          name: 'NOTES',
+          name: 'NOTE',
           menu: true,
         },
       },
@@ -55,18 +55,18 @@ const routes = [
           },
         ],
         meta: {
-          name: 'COMPONENTS',
+          name: 'COMPONENT',
           menu: true,
         },
       },
-      {
-        path: 'source',
-        component: () => import('@/view/sources.vue'),
-        meta: {
-          name: 'SOURCES',
-          menu: true,
-        },
-      },
+      // {
+      //   path: 'source',
+      //   component: () => import('@/view/sources.vue'),
+      //   meta: {
+      //     name: 'SOURCES',
+      //     menu: true,
+      //   },
+      // },
     ],
 
   },
