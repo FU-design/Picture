@@ -236,18 +236,25 @@ server {
     listen 80;
     server_name 39.105.23.101;
 
-    root /opt/Picture/dist;
-    index index.html;
-
-    # 处理以 /Picture/ 开头的请求，映射到 dist 目录
-    location /Picture/ {
-        alias /opt/Picture/dist/;
-        try_files $uri $uri/ /Picture/index.html;
-    }
-
-    # 根路径重定向到 /Picture/
+    # 直接访问根路径时，跳转到 /Picture/
     location = / {
         return 301 /Picture/;
+    }
+
+    # 处理 /Picture/ 下的所有请求
+    location /Picture/ {
+        alias /opt/Picture/dist/;
+        index index.html;
+
+        # 支持前端路由
+        try_files $uri $uri/ /index.html;
+
+        # 静态文件缓存
+        location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|ttf|svg|eot)$ {
+            expires 30d;
+            access_log off;
+            add_header Cache-Control "public";
+        }
     }
 }
 
