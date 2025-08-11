@@ -1,7 +1,7 @@
 ---
 Created At: 8/11/2025, 9:52:40 AM
 Updated At: 8/11/2025, 3:46:52 PM
-File Name: devploy-project
+File Name: 云服务器部署远程仓库 vue 项目
 ---
 
 # 项目部署
@@ -300,6 +300,22 @@ pnpm  build
 sudo nginx -t
 
 sudo systemctl restart nginx
+```
+
+在使用 `git pull origin main` 直接拉取代码时，会发现若拉取代码内容过大，会很慢才能拉取成功。
+
+第二种更新方案：**将打包好的文件上传到服务器**
+
+(1)在本地项目根目录执行
+
+```bash
+pnpm build
+```
+
+(2)在终端中输入以下内容即可，覆盖 `nginx` 引用的打包文件 `dist`,后续都是一样的。
+
+```bash
+scp -r dist/* root@你的服务器公网IP:/opt/Picture/dist/
 ```
 
 ## 问题处理
