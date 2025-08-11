@@ -158,7 +158,7 @@ sudo apt install -y git
 
 若出现以下内容：直接选择 `OK`（提示有服务（这里是 packagekit.service）使用了过时的库，需要重启以应用更新。）
 
-```
+```text
        Daemons using outdated libraries
 │                                             │
 │                                             │
