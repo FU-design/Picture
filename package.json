@@ -10,6 +10,7 @@
     "commit": "git add . & git-cz",
     "prepare": "husky",
     "test": "vitest",
+    "deploy": "bash ./deploy.sh",
     "note-map": "tsx scripts/generate-note-map.ts"
   },
   "dependencies": {
