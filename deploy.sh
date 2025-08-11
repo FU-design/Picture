@@ -14,8 +14,9 @@ echo "Deploying to $SERVER_IP, project dir: $PROJECT_DIR, branch: $GIT_BRANCH"
 SSH_USER="root"
 
 # ssh 执行远程命令
-ssh ${SSH_USER}@${SERVER_IP} << EOF
-  cd ${PROJECT_DIR} || { echo "Directory not found: ${PROJECT_DIR}"; exit 1; }
+ssh ${SSH_USER}@${SERVER_IP} bash -e << EOF
+  set -e  # 遇错即停
+  cd ${PROJECT_DIR}
   git pull origin ${GIT_BRANCH}
   pnpm install
   pnpm build
@@ -23,4 +24,8 @@ ssh ${SSH_USER}@${SERVER_IP} << EOF
   sudo systemctl restart nginx
 EOF
 
-echo "Deployment finished."
+if [ $? -eq 0 ]; then
+  echo "Deployment finished successfully."
+else
+  echo "Deployment failed."
+fi
