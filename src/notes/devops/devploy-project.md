@@ -1,6 +1,6 @@
 ---
 Created At: 8/11/2025, 9:52:40 AM
-Updated At: 8/11/2025, 3:46:52 PM
+Updated At: 8/11/2025, 4:40:16 PM
 File Name: 云服务器部署远程仓库 vue 项目
 ---
 
@@ -158,16 +158,16 @@ sudo apt install -y git
 
 若出现以下内容：直接选择 `OK`（提示有服务（这里是 packagekit.service）使用了过时的库，需要重启以应用更新。）
 
-```text
-       Daemons using outdated libraries
-│                                             │
-│                                             │
-│ Which services should be restarted?         │
-│                                             │
-│    [*] packagekit.service                   │
-│                                             │
-│                                             │
-│          <Ok>              <Cancel>         |
+```plaintext
+   Daemons using outdated libraries
+│                                        │
+│                                        │
+│  Which services should be restarted?   │
+│                                        │
+│    [*] packagekit.service              │
+│                                        │
+│                                        │
+│     <Ok>              <Cancel>         |
 
 ```
 
