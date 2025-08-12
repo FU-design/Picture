@@ -72,7 +72,7 @@ function initLayout() {
   })
 
   container.style.position = 'relative'
-  // container.style.height = `${Math.max(...colHeights) + gap}px`
+  container.style.height = `${Math.max(...colHeights) + gap}px`
 }
 
 onMounted(() => {
@@ -84,18 +84,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <PicView class="components">
+  <div class="components">
     <div v-for="(comp, _i) in components" :key="_i" class="component-item">
-      <PicCard :title="comp.__name">
+      <PicCard>
         <component :is="comp" />
-        <template #footer>
-          <div class="actions">
-            <PicSvgIcon name="code" />
+        <template #header>
+          <div class="card__header">
+            <span class="card__header-text">{{ comp.__name }}</span>
+            <div class="card__actions">
+              <PicSvgIcon name="code" />
+            </div>
           </div>
         </template>
       </PicCard>
     </div>
-  </PicView>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -114,17 +117,22 @@ onMounted(() => {
   will-change: transform;
 }
 
-.actions{
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 4px;
+.card__header{
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  transform: color 0.2s;
-  &:hover{
-    color: rgba(0, 0, 0, 0.6);
+  justify-content: space-between;
+  position: relative;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+  span{
+    display: block;
+    padding-block: 8px;
+    padding-inline: 8px;
   }
+}
+
+.card__actions{
+  display: flex;
+  flex-direction: row-reverse;
 }
 </style>
