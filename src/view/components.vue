@@ -54,7 +54,7 @@ function initLayout() {
 
   const containerWidth = container.getBoundingClientRect().width
   const gap = 24
-  const baseItemWidth = 300
+  const baseItemWidth = 500
 
   const colNum = Math.max(1, Math.floor((containerWidth + gap) / (baseItemWidth + gap)))
   const colWidth = (containerWidth - gap * (colNum - 1) - gap * 2) / colNum
@@ -86,8 +86,13 @@ onMounted(() => {
 <template>
   <PicView class="components">
     <div v-for="(comp, _i) in components" :key="_i" class="component-item">
-      <PicCard>
+      <PicCard :title="comp.__name">
         <component :is="comp" />
+        <template #footer>
+          <div class="actions">
+            <PicSvgIcon name="code" />
+          </div>
+        </template>
       </PicCard>
     </div>
   </PicView>
@@ -107,5 +112,19 @@ onMounted(() => {
   position: absolute;
   transition: transform 0.2s ease;
   will-change: transform;
+}
+
+.actions{
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transform: color 0.2s;
+  &:hover{
+    color: rgba(0, 0, 0, 0.6);
+  }
 }
 </style>

@@ -1,32 +1,46 @@
 <script setup lang="ts">
-import component from '@/assets/svg/component.svg'
-import home from '@/assets/svg/home.svg'
-import write from '@/assets/svg/write.svg'
-
 import { computed } from 'vue'
 import { type RouteRecordRaw, useRouter } from 'vue-router'
 
-const iconMap = {
-  COMPONENT: component,
-  HOME: home,
-  NOTE: write,
-} as Record<string, string>
+interface MenuItem {
+  name: string
+  type: 'page' | 'link'
+  action: (route?: RouteRecordRaw) => void
+}
 
 const router = useRouter()
 const routes = computed(() => router.getRoutes().filter(v => v.meta.menu))
 const currRouteName = computed(() => router.currentRoute.value.meta.name)
 
+const menus = computed(() => [...(routes.value.map(v => ({
+  name: v.meta.name as string,
+  type: 'page',
+  action: () => goPage(v),
+}))), { name: 'github', type: 'link', action: () => openGithub() }]) as unknown as MenuItem[]
+
 function goPage(route: RouteRecordRaw) {
   router.push({ path: (route.redirect || route.path) as string })
+}
+
+function openGithub() {
+  window.open('https://github.com/FU-design/Picture', '_blank')
 }
 </script>
 
 <template>
   <header>
     <ul>
-      <li v-for="(route, index) in routes" :key="index" :class="{ selected: currRouteName === route.meta.name }" @click="goPage(route)">
-        <img :src="iconMap[route.meta.name as string]">
-      </li>
+      <template v-for="(item, index) in menus" :key="index">
+        <li v-if="item.type === 'page'" :class="{ selected: currRouteName === item.name }" @click="() => item.action()">
+          <PicSvgIcon :name="(item.name as string).toLowerCase()" :color="currRouteName === item.name ? '#000' : 'rgba(0,0,0,.5)'" />
+        </li>
+      </template>
+      <li class="divider" />
+      <template v-for="(item, index) in menus" :key="index">
+        <li v-if="item.type === 'link'" @click="() => item.action()">
+          <PicSvgIcon :name="(item.name as string).toLowerCase()" :color="currRouteName === item.name ? '#000' : 'rgba(0,0,0,.5)'" />
+        </li>
+      </template>
     </ul>
   </header>
 </template>
@@ -34,58 +48,54 @@ function goPage(route: RouteRecordRaw) {
 <style lang="scss"  scoped>
 header{
   position: fixed;
-  bottom: 20px;
   left: 50%;
+  bottom: 5%;
   z-index: 99999;
   transform: translateX(-50%);
+  padding: 4px 16px;
+  border-radius: 9999px;
 
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 4px 12px;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.1);
 
   ul{
     display: flex;
+    align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
-    padding: 0 16px;
+    gap: 24px;
 
     li{
+      flex-shrink: 0;
+      padding: 8px;
       position: relative;
-      padding: 16px;
-      transition: border-color 0.15s, box-shadow 0.15s;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+
       cursor: pointer;
-      img{
-        width: 24px;
-        height: 24px;
-        transition: transform 0.15s;
-        &:hover{
-          transform: scale(1.3);
-        }
-        &:active{
-          transform: scale(0.9);
-        }
+      border-radius: 9999px;
+
+      &:not(.selected,.divider):hover{
+        transform: scale(1.5);
+      }
+      &:is(.divider){
+        padding: 0;
+        width: 1px;
+        height: 20px;
+        background-color: rgba(0, 0, 0, 0.3);
       }
     }
   }
 }
 
 .selected{
-  &::after{
-    content: '';
-    position: absolute;
-    height: 4px;
-    width: 4px;
-    border-radius: 9999px;
-    background-color: #0000005f;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: rgba(0, 0, 0, 0.06) 0px 4px 12px;
-    transition: all 0.15s;
-  }
-  img{
-    transform: scale(1.3);
+  span{
+    transform: scale(1.5);
+    transition: transform 0.2s, color 0.2s;
+    color: rgba(255, 255, 255, 0.3);
   }
 }
 </style>
