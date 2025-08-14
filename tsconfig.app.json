@@ -10,7 +10,7 @@
       "@assets/*": ["src/assets/*"]
     },
 
-    "types": ["node"],
+    "types": ["node", "unplugin-icons/types/vue"],
 
     /* Linting */
     "strict": true, // 检查并报错未使用的函数参数。

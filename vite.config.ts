@@ -2,9 +2,13 @@ import path from 'node:path'
 import vue from '@vitejs/plugin-vue'
 import { visualizer } from 'rollup-plugin-visualizer'
 import AutoImport from 'unplugin-auto-import/vite'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
+import IconsResolver from 'unplugin-icons/resolver'
+import Icons from 'unplugin-icons/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig, type PluginOption } from 'vite'
+
 import MarkdownFrontmatter from './plugins/markdown-frontmatter'
 
 // https://vite.dev/config/
@@ -17,6 +21,18 @@ export default defineConfig(({ command, mode }) => {
       visualizer() as PluginOption,
       vue(),
       MarkdownFrontmatter({ matchPath: 'src/notes/**/*.md' }),
+      Icons({
+        compiler: 'vue3',
+        customCollections: {
+          svg: FileSystemIconLoader('src/assets/svg'),
+        },
+        iconCustomizer(collection, props: any) {
+          if (collection === 'pic') {
+            props.width = '1em'
+            props.height = '1em'
+          }
+        },
+      }),
       AutoImport({
         imports: ['vue', 'pinia', 'vue-router'],
         resolvers: [AntDesignVueResolver()],
@@ -27,6 +43,12 @@ export default defineConfig(({ command, mode }) => {
           AntDesignVueResolver({
             importStyle: false, // v4.x 不在使用 import 'ant-design-vue/es/form/style/css'
             resolveIcons: true,
+          }),
+          IconsResolver({
+            prefix: '',
+            customCollections: [
+              'svg',
+            ],
           }),
         ],
         dts: 'src/types/components.d.ts',
