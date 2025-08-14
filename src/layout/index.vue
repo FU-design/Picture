@@ -15,5 +15,6 @@ import LayoutMain from '@/layout/main/index.vue'
 <style scoped>
 .layout{
   position: relative;
+  background-color: #fff;
 }
 </style>

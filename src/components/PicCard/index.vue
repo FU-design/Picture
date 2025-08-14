@@ -4,7 +4,7 @@ withDefaults(defineProps<{
 }>(), {
   showHeader: true,
   title: '',
-  border: false,
+  border: true,
 })
 </script>
 
@@ -21,10 +21,8 @@ withDefaults(defineProps<{
 <style scoped>
 .pic-card{
   border-radius: 6px;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  background-color: rgba(255, 255, 255, 0.8);
   overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
 }
 
 .pic-card__body{

@@ -4,21 +4,6 @@
 @tailwind utilities;
 
 :root {
-  position: relative;
-   /* === Primary Base Colors === */
-  --color-primary-100: #d2dbeb;
-  --color-primary-200: #6a90b4;
-  --color-primary-300: #3c6a90;    
-  --color-primary-400: #00385a;
-  --color-primary-500: #01162b;
-
-  /* === Gradient Colors === */
-  --gradient-primary-1: linear-gradient(to right, #01162b, #6a90b4);
-  --gradient-primary-2: linear-gradient(to right, #00385a, #d2dbeb);
-  --gradient-primary-3: linear-gradient(to right, #d2dbeb, #01162b);
-  --gradient-primary-4: linear-gradient(to right, #d2dbeb, #6a90b4);
-
-  
 }
 
 /* 字体响应式 字体随着屏幕大小线性缩放 */
@@ -32,11 +17,9 @@ body {
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background: linear-gradient(160deg, #f6e0e0 0,#c4caef 58%,#6a90b4 140%);
+  background-color: #fff;
 }
 
 
 
-.bg-gh-marketingDark {
-  background-color: var(-color-primary-500);
-}
+

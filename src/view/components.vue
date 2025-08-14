@@ -72,7 +72,7 @@ function initLayout() {
   })
 
   container.style.position = 'relative'
-  container.style.height = `${Math.max(...colHeights) + gap}px`
+  // container.style.height = `${Math.max(...colHeights) + gap}px`
 }
 
 onMounted(() => {
@@ -122,8 +122,7 @@ onMounted(() => {
   justify-content: space-between;
   position: relative;
   box-sizing: border-box;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+  box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
   span{
     display: block;
     padding-block: 8px;
