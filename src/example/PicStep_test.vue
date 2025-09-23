@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { StepItem } from '@/components/PicStep/type'
 import PicStep from '@/components/PicStep/index.vue'
-import { shallowRef } from 'vue'
 
 const steps = shallowRef<StepItem[]>([
   {

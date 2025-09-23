@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ContentItem } from '@/components/PicTagTextEditor/type'
-import PicTagTextEditor from '@/components/PicTagTextEditor/index.vue'
 import { reactive, ref } from 'vue'
+import PicTagTextEditor from '@/components/PicTagTextEditor/index.vue'
 
 type PicTagTextEditorType = InstanceType<typeof PicTagTextEditor>
 

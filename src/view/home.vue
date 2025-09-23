@@ -2,12 +2,17 @@
 </script>
 
 <template>
-  <div class="home" />
+  <div class="home">
+    <PicPdfView />
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .home{
-  padding: 24px;
-  height: 100%;
+  width: 60vw;
+  height: 90%;
+  padding: 16px;
+  display: flex;
+  margin: 0 auto;
 }
 </style>

@@ -1,7 +1,7 @@
-import { installAntdApi } from '@/utils/antd-global-api'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import VueDOMPurifyHTML from 'vue-dompurify-html'
+import { installAntdApi } from '@/utils/antd-global-api'
 import App from './App.vue'
 import router from './router'
 import './styles/main.css'

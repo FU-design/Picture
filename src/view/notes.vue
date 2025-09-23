@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { type NoteData, useDynamicRoutes } from '@/stores/dynamic-routes'
 import dayjs from 'dayjs'
 import { onMounted } from 'vue'
+import { type NoteData, useDynamicRoutes } from '@/stores/dynamic-routes'
 
 const router = useRouter()
 const timelines = shallowRef<Map<string, NoteData[]>>(new Map())
