@@ -4,7 +4,9 @@ import ToolBar from '@/components/PicPdfView/toolbar/index.vue'
 
 import { usePdfViewer } from '@/components/PicPdfView/usePdfViewer'
 
-const { containerRef, pdfViewerRef } = usePdfViewer('./Mo─O─FeP.pdf')
+const { containerRef, pdfViewerRef, pdfDoc } = usePdfViewer('./Mo─O─FeP.pdf')
+
+provide('pdfDoc', pdfDoc)
 </script>
 
 <template>
@@ -25,4 +27,14 @@ const { containerRef, pdfViewerRef } = usePdfViewer('./Mo─O─FeP.pdf')
 </template>
 
 <style lang="scss" scoped>
+/*  解决文本层和 caverns 错位问题  */
+:deep(.textLayer) {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+:deep(.annotationLayer) {
+  width: 100% !important;
+  height: 100% !important;
+}
 </style>

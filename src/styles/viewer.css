@@ -92,16 +92,6 @@
   width: 100%;
 }
 
-/*  解决文本层和 caverns 错位问题  */
-:deep(.textLayer) {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-:deep(.annotationLayer) {
-  width: 100% !important;
-  height: 100% !important;
-}
 
 .toolbar{
   position: relative;

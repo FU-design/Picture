@@ -17,7 +17,7 @@ export function usePdfViewer(url: string) {
   const pdfDoc = shallowRef<PDFDocumentProxy>()
   const containerRef = ref<HTMLDivElement | null>(null)
   const pdfViewerRef = ref<HTMLDivElement | null>(null)
-  const SEARCH_FOR = ref<string>('书名')
+  const SEARCH_FOR = ref<string>('Liu')
 
   /**
    * 初始化PDF查看器
@@ -33,7 +33,7 @@ export function usePdfViewer(url: string) {
       container: containerRef.value!,
       viewer: pdfViewerRef.value!,
       eventBus,
-      textLayerMode: 2,
+      textLayerMode: 1,
       linkService: pdfLinkService,
       findController: pdfFindController,
       enableAutoLinking: true,
@@ -62,5 +62,5 @@ export function usePdfViewer(url: string) {
     await setupPDFViewer()
   })
 
-  return { containerRef, pdfViewerRef }
+  return { containerRef, pdfViewerRef, pdfDoc }
 }
