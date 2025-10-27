@@ -1,6 +1,31 @@
 /**
- * 冒泡排序（Bubble Sort）是“不断交换相邻元素”
+ * 冒泡排序：相邻元素不断进行大小对比和互换位置（每一轮（外层 i 的一次循环）都会把 最大的元素 冒泡到“当前未排序部分”的末尾）
+ * 时间复杂度：平均-O(n^2) 最优-O(n) 最坏-O(n^2)
+ * 空间复杂度: O(n)（复制版） / O(1)（原地版）
  */
+function bubbleSort(arr: number[]) {
+  // 这里需要 -1: 既可以减少外层一次循环，还避免了内层 j=5 时会出现数组下标越界的问题（arr[6]的情况）
+  const n = arr.length - 1
+  for (let i = 0; i < n; i++) {
+    let swapped = false // 对每次循环开始添加一个是否交换顺序的标识，若当前的数组一开始就是有序的则无需在进入循环
+    for (let j = 0; j < n - i; j++) { // - i 是为了 每轮减少比较范围; 因为每完成一轮，末尾已有一个元素处在最终位置，不需要再参与比较。
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]] // 解构赋值
+        swapped = true
+      }
+    }
+    if (!swapped) {
+      break
+    }
+  }
+  return arr
+}
+
+// Driver Code
+const arr2 = [10, 7, 8, 9, 1, 5]
+
+// call BubbleSort on the entire array
+console.warn(bubbleSort(arr2))
 
 const arr = [5, 3, 8, 4, 2]
 const profile = [
@@ -8,6 +33,8 @@ const profile = [
   { name: 'B', group: 'B', score: 85 },
   { name: 'C', group: 'A', score: 95 },
 ]
+
+// ======================================== 拓展 ========================================
 
 /**
  * 多关键字排序
@@ -51,29 +78,6 @@ const sorted = bubble(profile, (a, b) => {
 })
 
 console.warn(sorted)
-
-/**
- * 冒泡排序
- * @param arr
- * @returns 返回排序后的数组
- */
-function bubbleSort(arr: number[]) {
-  const n = arr.length - 1
-  for (let i = 0; i < n; i++) {
-    let swapped = false
-    for (let j = 0; j < n - i; j++) {
-      if (arr[j] > arr[j + 1]) {
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
-        swapped = true
-      }
-    }
-    if (!swapped)
-      break
-  }
-  return arr
-}
-
-console.warn(bubbleSort([5, 3, 8, 4, 2])) // [2, 3, 4, 5, 8]
 
 /**
  * 鸡尾酒排序（双向冒泡排序）

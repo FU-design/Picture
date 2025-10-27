@@ -5,9 +5,6 @@
  *
  * 选择排序无论是否有序，都要扫描剩余元素 最优和最坏都是 O(n^2)
  */
-
-const arr = [5, 3, 8, 4, 2]
-
 function selectionSort(arr: number[]) {
   const n = arr.length
   for (let i = 0; i < n - 1; i++) {
@@ -23,4 +20,5 @@ function selectionSort(arr: number[]) {
   }
 }
 
+const arr = [5, 3, 8, 4, 2]
 console.warn(selectionSort(arr))
