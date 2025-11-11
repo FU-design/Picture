@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 /**
  * 角度转弧度
  * @param deg 角度
@@ -153,4 +155,27 @@ export function isObjectEqual(obj1: any, obj2: any): boolean {
     }
   }
   return true
+}
+
+type TimeRange = [string | undefined, string | undefined]
+
+/**
+ * 格式化时间格式
+ * @param times  需要格式化的时间元组
+ * @param keys   格式化为对象时对应的键元组
+ * @param style  时间格式 默认 YYYY-MM-DD
+ * @returns 制定键的对象
+ */
+export function getFormatTimeRanges(times: TimeRange, keys: [string, string], style = 'YYYY-MM-DD') {
+  const timeMap = {} as Record<string, string>
+
+  if (times == null)
+    return timeMap
+
+  let i = 0
+  while (i < 2 && times![i] !== undefined) {
+    timeMap[`${keys[i]}`] = dayjs(times[i]).format(`${style}`)
+    i++
+  }
+  return timeMap
 }
