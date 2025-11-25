@@ -157,7 +157,7 @@ export function isObjectEqual(obj1: any, obj2: any): boolean {
   return true
 }
 
-type TimeRange = [string | undefined, string | undefined]
+type TimeRange = [string?, string?]
 
 /**
  * 格式化时间格式
