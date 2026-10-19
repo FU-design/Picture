@@ -5,7 +5,7 @@
 <template>
   <div class="toolbarHorizontalGroup">
     <!-- 查找按钮 -->
-    <button id="viewFindButton" type="button" class="toolbarButton"/>
+    <button id="viewFindButton" type="button" class="toolbarButton" />
 
     <!-- 查找（1 || more） -->
     <div v-if="false" id="findbar" class="hidden doorHanger toolbarHorizontalGroup">

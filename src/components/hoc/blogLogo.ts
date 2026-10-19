@@ -1,5 +1,5 @@
-import Logo from '@/assets/logo.png'
 import { defineComponent, h } from 'vue'
+import Logo from '@/assets/logo.png'
 import '@/styles/logo.css'
 
 export default defineComponent({

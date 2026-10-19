@@ -204,8 +204,8 @@ function setupContents() {
 // PicTagTextEditor_test.vue
 
 import type { ContentItem } from '@/components/PicTagTextEditor/type'
-import PicTagTextEditor from '@/components/PicTagTextEditor/index.vue'
 import { reactive, ref } from 'vue'
+import PicTagTextEditor from '@/components/PicTagTextEditor/index.vue'
 
 const picTagTextEditorRef = ref<InstanceType<typeof PicTagTextEditor>>()
 const data = reactive<ContentItem[]>([ // 模拟数据

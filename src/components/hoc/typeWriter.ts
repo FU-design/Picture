@@ -1,5 +1,5 @@
-import { useTypeWriter } from '@/composables/useTypeWriter'
 import { defineComponent, h, onMounted } from 'vue'
+import { useTypeWriter } from '@/composables/useTypeWriter'
 import '@/styles/type-writer.css'
 
 const typeWriterProps = {

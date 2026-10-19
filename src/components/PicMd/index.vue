@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { copyText } from '@/utils/tools'
 import hljs from 'highlight.js'
 import { Marked, type Tokens } from 'marked'
 import { markedHighlight } from 'marked-highlight'
 import { computed, nextTick, toRefs } from 'vue'
+import { copyText } from '@/utils/tools'
 
 interface Props {
   markRaw: string

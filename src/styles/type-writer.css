@@ -4,7 +4,7 @@
   margin-bottom: 30px;
 }
 
-.text{
+.text {
   display: inline-block;
   word-wrap: break-word;
   letter-spacing: 20px;
@@ -13,22 +13,38 @@
   animation: fadeIn 0.1s forwards;
 }
 
-.text::after{
-  font-family:'monospace';
-  content: '|';
+.text::after {
+  font-family: "monospace";
+  content: "|";
   display: inline-block;
   animation: blink 1s infinite alternate-reverse;
 }
 
 @keyframes blink {
-  0%{ opacity: 1;};
-  25%{ opacity: 0;};
-  50%{ opacity: 1;};
-  75%{ opacity: 0;};
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(2px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

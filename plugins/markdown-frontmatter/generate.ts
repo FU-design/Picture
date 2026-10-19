@@ -43,7 +43,15 @@ export async function generateMetaMap() {
     // 如果 File Name 缺失，用文件名补充
     const finalFileName = fm.fileName || fileName
     const parsed = matter(content)
-    metaMap.set(finalFileName, { ...parsed, data: (Object.assign(parsed.data, { Path: filePath, Tag: tag })) })
+    metaMap.set(finalFileName, {
+      ...parsed,
+      data: {
+        ...parsed.data,
+        'File Name': finalFileName,
+        'Path': filePath,
+        'Tag': tag,
+      },
+    })
   }
 
   await ensureDir(path.dirname(META_JSON_PATH))

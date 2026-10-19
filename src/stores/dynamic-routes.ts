@@ -1,9 +1,9 @@
 import type { Router } from 'vue-router'
-import NoteDetail from '@/components/hoc/noteDetail'
-import { notesData } from '@/utils/note-map'
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import updateLocale from 'dayjs/plugin/updateLocale'
+import NoteDetail from '@/components/hoc/noteDetail'
+import { notesData } from '@/utils/note-map'
 
 dayjs.extend(advancedFormat)
 dayjs.extend(updateLocale)

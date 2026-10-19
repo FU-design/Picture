@@ -4,8 +4,7 @@ import workerSrc from 'pdfjs-dist/build/pdf.worker.min?url'
 import {
   EventBus,
   PDFFindController,
-  PDFLinkService,
-  PDFSinglePageViewer, // 单页
+  PDFLinkService, // 单页
   PDFViewer,
 } from 'pdfjs-dist/web/pdf_viewer.mjs'
 import 'pdfjs-dist/web/pdf_viewer.css'

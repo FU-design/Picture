@@ -1,13 +1,12 @@
-:root{
+:root {
   --icon-size: 16px;
   --toolbar-icon-opacity: 0.8;
   --toolbar-icon-color: #fff;
   --toolbar-icon-hover-bg-color: #eee;
 
-
-  --field-color:#fff;
-  --field-border-color:#000;
-  --field-bg-color:light-dark(rgb(249 249 250), rgb(56 56 61));
+  --field-color: #fff;
+  --field-border-color: #000;
+  --field-bg-color: light-dark(rgb(249 249 250), rgb(56 56 61));
 
   --button-hover-color: color-mix(in srgb, currentColor 17%, transparent);
 
@@ -61,7 +60,7 @@
   --editorParams-stampAddImage-icon: url(../assets/images/toolbarButton-zoomIn.svg);
 }
 
-#outerContainer{
+#outerContainer {
   position: relative;
   width: 100%;
   height: 100%;
@@ -69,7 +68,7 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-#mainContainer{
+#mainContainer {
   position: absolute;
   inset: 0;
   margin: 0;
@@ -92,26 +91,25 @@
   width: 100%;
 }
 
-
-.toolbar{
+.toolbar {
   position: relative;
   z-index: 2;
   background-color: light-dark(rgb(249 249 250), rgb(56 56 61));
 }
 
-.toolbarContainer{
+.toolbarContainer {
   height: 28px;
   padding-inline: 16px;
 }
 
-#toolbarViewer{
+#toolbarViewer {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: space-between;
 }
 
-#toolbarViewerLeft{
+#toolbarViewerLeft {
   display: flex;
 }
 
@@ -124,7 +122,6 @@
   gap: 1px;
   box-sizing: border-box;
 }
-
 
 .toolbarButton {
   height: 100%;
@@ -139,11 +136,10 @@
   position: relative;
   padding: 0;
 
-  &:hover{
+  &:hover {
     background-color: var(--button-hover-color);
   }
 }
-
 
 .toolbarButton::before {
   content: "";
@@ -156,12 +152,10 @@
   mask-position: center;
 }
 
-
 #printButton::before {
   mask-image: var(--toolbarButton-print-icon);
   -webkit-mask-image: var(--toolbarButton-print-icon);
 }
-
 
 #downloadButton::before {
   mask-image: var(--toolbarButton-download-icon);
@@ -173,20 +167,15 @@
   -webkit-mask-image: var(--toolbarButton-search-icon);
 }
 
-
 #previous::before {
   mask-image: var(--toolbarButton-pageUp-icon);
   -webkit-mask-image: var(--toolbarButton-pageUp-icon);
 }
 
-
 #next::before {
   mask-image: var(--toolbarButton-pageDown-icon);
   -webkit-mask-image: var(--toolbarButton-pageDown-icon);
 }
-
-
-
 
 .toolbarField {
   padding: 4px 7px;
@@ -205,7 +194,6 @@
     border-color: #0a84ff;
   }
 }
-
 
 #pageNumber {
   -moz-appearance: textfield; /* hides the spinner in moz */

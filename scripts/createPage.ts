@@ -20,7 +20,7 @@ function getFolders() {
 }
 
 // Generate Markdown file content
-function generateMarkdownContent(fileName) {
+function generateMarkdownContent(fileName: string) {
   const currentTime = new Date().toLocaleString()
   return `---
 Created At: ${currentTime}
@@ -35,7 +35,7 @@ This is the content of ${fileName}.
 }
 
 // Create a file
-function createFile(folder, fileName) {
+function createFile(folder: string, fileName: string) {
   const filePath = path.join(notesDir, folder, `${fileName}.md`)
   const content = generateMarkdownContent(fileName)
   fs.writeFileSync(filePath, content)
