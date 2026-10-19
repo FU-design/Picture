@@ -125,6 +125,20 @@ git push origin main --force
 
 ---
 
+## 8️⃣ 当进行 push 操作时出现如下错误：
+
+```bash
+remote: Invalid username or token. Password authentication is not supported for Git operations.
+fatal: Authentication failed for 'https://github.com/FU-design/Picture.git/'
+```
+说明当前 Github 拒绝了本机当前使用的用户名或凭据，这时重新登录一下即可：
+
+```bash
+git credential-manager github login
+```
+
+---
+
 ## 🔔 **常见命令总结**
 
 | 操作         | 命令                              |
